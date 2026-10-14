@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SB Camping Trip</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SB Camping">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#E6ECE9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121915" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
+<style>
+:root{
+  --bg:#E6ECE9; --surface:#F5F8F6; --surface2:#EEF2EF; --ink:#1E2B26; --muted:#5C6B64;
+  --primary:#2F5D6E; --on-primary:#FFFFFF; --accent:#8F6531; --moss:#56684A; --stone:#A9B5AF;
+  --line:#CBD5D0; --good:#2F5D6E; --warn:#8F6531; --shadow:0 1px 2px rgba(30,43,38,.08),0 6px 18px rgba(30,43,38,.07);
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121915; --surface:#1A231F; --surface2:#222D28; --ink:#DCE5E0; --muted:#94A39C;
+    --primary:#7FB0C2; --on-primary:#121915; --accent:#D6A866; --moss:#93A884; --stone:#4C5A53;
+    --line:#2C3833; --good:#7FB0C2; --warn:#D6A866; --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121915; --surface:#1A231F; --surface2:#222D28; --ink:#DCE5E0; --muted:#94A39C;
+  --primary:#7FB0C2; --on-primary:#121915; --accent:#D6A866; --moss:#93A884; --stone:#4C5A53;
+  --line:#2C3833; --good:#7FB0C2; --warn:#D6A866; --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px)}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);
+  font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  -webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+h1,h2,h3{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;font-weight:700;margin:0;letter-spacing:-.01em}
+a{color:var(--primary)}
+button{font:inherit;color:inherit}
+.hidden{display:none!important}
+
+/* Header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);
+  display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.top h1{font-size:1.2rem;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pill{font-size:.78rem;color:var(--muted);background:var(--surface2);border-radius:999px;padding:4px 10px;white-space:nowrap;max-width:46vw;overflow:hidden;text-overflow:ellipsis}
+.pill.err{color:var(--warn)}
+.iconbtn{width:44px;height:44px;border:0;background:transparent;border-radius:12px;display:grid;place-items:center;cursor:pointer;color:var(--ink)}
+.iconbtn:active{background:var(--surface2)}
+.iconbtn svg{width:24px;height:24px}
+
+/* Layout */
+main{max-width:680px;margin:0 auto;padding:14px 14px 120px}
+.banner{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:.9rem;color:var(--muted);margin-bottom:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden}
+.card-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px 6px}
+.card-h h2{font-size:1.15rem}
+.card-b{padding:6px 16px 14px}
+.sub{color:var(--muted);font-size:.9rem}
+.sect{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;font-size:1.05rem;margin:20px 2px 8px;display:flex;justify-content:space-between;align-items:baseline}
+.sect small{font-family:inherit;font-size:.85rem;color:var(--muted);font-weight:400}
+
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:.95rem}
+.kv dt{color:var(--muted);font-weight:700}
+.kv dd{margin:0;overflow-wrap:anywhere}
+
+.row{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border-top:1px solid var(--line);min-height:56px}
+.row:first-child{border-top:0}
+.row .main{flex:1;min-width:0;cursor:pointer}
+.row .t{font-weight:600;overflow-wrap:anywhere}
+.row .n{color:var(--muted);font-size:.88rem;overflow-wrap:anywhere}
+.row .time{flex:none;width:76px;color:var(--moss);font-weight:600;font-size:.9rem;padding-top:1px}
+.row.done .t{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--stone)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:5px}
+.chip{font-size:.78rem;border-radius:999px;padding:2px 9px;background:var(--surface2);color:var(--ink);border:1px solid var(--line)}
+.chip.open{color:var(--accent);border-color:var(--accent);background:transparent}
+.chip.opt{color:var(--moss);border-color:var(--moss);background:transparent}
+
+.chk{flex:none;width:30px;height:30px;margin:1px 0 0;border-radius:9px;border:2px solid var(--moss);background:transparent;cursor:pointer;display:grid;place-items:center;padding:0}
+.chk[aria-checked="true"]{background:var(--primary);border-color:var(--primary)}
+.chk svg{width:18px;height:18px;color:var(--on-primary);opacity:0}
+.chk[aria-checked="true"] svg{opacity:1}
+.chk:focus-visible,.btn:focus-visible,.iconbtn:focus-visible,.seg button:focus-visible,.tabbar button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:12px;min-height:44px;padding:10px 16px;font-weight:600;cursor:pointer}
+.btn.pri{background:var(--primary);color:var(--on-primary);border-color:var(--primary)}
+.btn.warn{color:var(--warn);border-color:var(--warn);background:transparent}
+.btn.small{min-height:36px;padding:6px 12px;font-size:.9rem}
+.btn.block{width:100%}
+.btn:disabled{opacity:.55}
+.addrow{display:flex;justify-content:center;padding:10px 16px 14px;border-top:1px solid var(--line)}
+.linkbtn{border:0;background:none;color:var(--primary);font-weight:600;padding:8px 4px;cursor:pointer;min-height:40px}
+
+.seg{display:flex;background:var(--surface2);border-radius:12px;padding:4px;gap:4px;margin-bottom:12px}
+.seg button{flex:1;border:0;background:transparent;border-radius:9px;min-height:40px;font-weight:600;color:var(--muted);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+
+.bar{height:8px;border-radius:99px;background:var(--surface2);overflow:hidden;margin:8px 0 2px}
+.bar i{display:block;height:100%;background:var(--moss);border-radius:99px}
+
+.bal{display:flex;justify-content:space-between;padding:10px 16px;border-top:1px solid var(--line)}
+.bal:first-child{border-top:0}
+.pos{color:var(--good);font-weight:600}
+.neg{color:var(--warn);font-weight:600}
+
+.photos{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:12px}
+.photo{border-radius:12px;overflow:hidden;background:var(--surface2);border:1px solid var(--line);cursor:pointer;padding:0;text-align:left}
+.photo img{display:block;width:100%;aspect-ratio:1;object-fit:cover}
+.phwait{aspect-ratio:1;display:grid;place-items:center;text-align:center;padding:10px;font-size:.82rem;color:var(--muted)}
+.photo span{display:block;padding:6px 8px;font-size:.82rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Tab bar */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);
+  display:grid;grid-template-columns:repeat(6,1fr);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabbar button{border:0;background:transparent;min-height:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:.72rem;color:var(--muted);cursor:pointer}
+.tabbar button svg{width:24px;height:24px}
+.tabbar button[aria-current="page"]{color:var(--primary);font-weight:700}
+
+/* Sheet */
+.scrim{position:fixed;inset:0;background:rgba(18,25,21,.45);z-index:40}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;background:var(--surface);border-radius:20px 20px 0 0;
+  max-height:90%;overflow:auto;padding:8px 16px calc(18px + env(safe-area-inset-bottom,0px));max-width:680px;margin:0 auto;box-shadow:0 -8px 30px rgba(0,0,0,.2)}
+.sheet .grab{width:40px;height:5px;border-radius:9px;background:var(--line);margin:4px auto 10px}
+.sheet h2{font-size:1.25rem;margin-bottom:10px}
+.sheet h3{font-size:1.02rem;margin:18px 0 6px}
+.field{margin-bottom:12px}
+.field label,.lbl{display:block;font-size:.85rem;color:var(--muted);margin-bottom:4px;font-weight:600}
+.field input[type=text],.field input[type=url],.field input[type=password],.field input[type=date],.field input[type=time],.field input[type=tel],.field input[type=number],.field select,.field textarea{
+  width:100%;font:inherit;font-size:16px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:11px 12px;min-height:46px}
+.field textarea{min-height:90px;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{outline:3px solid var(--accent);outline-offset:0;border-color:transparent}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts label{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:12px;padding:8px 12px;min-height:44px;font-size:.95rem;color:var(--ink);font-weight:500;margin:0}
+.opts input{width:20px;height:20px;accent-color:var(--primary)}
+.actions{display:flex;gap:10px;margin-top:16px}
+.actions .btn{flex:1}
+.note{font-size:.88rem;color:var(--muted);margin:6px 0 10px}
+.alert{font-size:.9rem;color:var(--warn);margin:8px 0}
+.sep{height:1px;background:var(--line);margin:16px 0}
+
+/* Toast */
+.toast{position:fixed;left:12px;right:12px;bottom:calc(70px + env(safe-area-inset-bottom,0px));z-index:30;max-width:520px;margin:0 auto;
+  background:var(--ink);color:var(--bg);border-radius:14px;padding:10px 10px 10px 16px;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow)}
+.toast span{flex:1;font-size:.92rem}
+.toast button{border:0;background:transparent;color:var(--bg);font-weight:700;min-height:40px;padding:0 12px;cursor:pointer;text-decoration:underline}
+
+/* Gate screens */
+.gate{max-width:460px;margin:0 auto;padding:28px 18px 60px}
+.gate .mark{width:72px;height:72px;border-radius:18px;margin-bottom:16px}
+.gate h1{font-size:1.8rem;margin-bottom:6px}
+.gate p{color:var(--muted)}
+.people{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.people button{min-height:56px;border-radius:14px;border:1px solid var(--line);background:var(--surface);font-weight:700;font-size:1.05rem;cursor:pointer}
+.people button[aria-pressed="true"]{background:var(--primary);color:var(--on-primary);border-color:var(--primary)}
+.log{font-size:.88rem}
+.log .row{min-height:0;padding:9px 16px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+'use strict';
+const VER = '2026.10.14-1657';
+const SEED = {"v":1,"people":{"ryan":"Ryan","earl":"Earl","grant":"Grant","cassie":"Cassie"},"cars":{"car1":{"label":"Car 1","who":["ryan","earl"]},"car2":{"label":"Car 2","who":["grant","cassie"]}},"col":{"trip":{"main":{"name":"SB Camping Trip","start":"2026-11-06","end":"2026-11-08","campsite":"Paradise Campground, Los Padres National Forest","site":"011","address":"Paradise Rd, Santa Barbara, CA 93105","map":"https://www.google.com/maps/search/?api=1&query=Paradise+Campground+Paradise+Rd+Santa+Barbara+CA","resv":"#0962781258-1 (Recreation.gov, under Grant Hays)","checkin":"Fri Nov 6, 3:00 PM","checkout":"Sun Nov 8, 12:00 PM","vehicles":"Reservation covers 1 car. Confirm the second-car fee and parking with the ranger district.","ranger":"Santa Barbara Ranger District","rangerPhone":"(805) 967-3481","permit":"Grant holds a California Campfire Permit, good through Dec 31, 2026","id":"main","u":1791918000000,"by":"grant"}},"heads":{"h0":{"title":"Weather","text":"Too far out for a forecast. Typical early November: highs near 69F and mostly sunny; nights at camp in the low 40s, possibly high 30s. Check the forecast around Oct 30.","order":0,"id":"h0","u":1791918000000,"by":"grant"},"h1":{"title":"Red Rock","text":"As of the Forest Service's April update, River Rd is gated at mile 3, so it's 2.5 mi each way to the pools. Bring bikes. In a dry fall the river is a chain of ponds; the big Red Rock pool usually stays clear but cold.","order":1,"id":"h1","u":1791918000000,"by":"grant"},"h2":{"title":"Hot springs hike","text":"Rock scrambling and 4-5 creek crossings. The pools are spring-fed and stay hot. Bring swimsuits and sandals or tevas. Route: https://www.komoot.com/smarttour/e1773851713/hot-springs-and-cold-spring-trail-loop","order":2,"id":"h2","u":1791918000000,"by":"grant"},"h3":{"title":"Fires","text":"Paradise is exempt from the Santa Barbara front-country wood fire ban, so fires in the ring may be allowed. Confirm the week before; bring propane either way.","order":3,"id":"h3","u":1791918000000,"by":"grant"},"h4":{"title":"Parking","text":"The Hot Springs trailhead is residential and tickets are common. Read the signs.","order":4,"id":"h4","u":1791918000000,"by":"grant"},"h5":{"title":"Quiet hours","text":"10 PM to 6 AM. Keep Friday's party low after 10.","order":5,"id":"h5","u":1791918000000,"by":"grant"},"h6":{"title":"Cold Spring Tavern hours","text":"Confirmed by phone. Historic Tavern Fri-Sun 11:30 AM-4 PM. Log Cabin Bar Fri-Sun 11 AM-5 PM. Tri-tip BBQ Sat-Sun 11 AM-5 PM. Live music Sat-Sun 1:30-4:30 PM. No dinner service.","order":6,"id":"h6","u":1791918000000,"by":"grant"}},"itin":{"i00":{"day":"2026-11-06","start":"15:00","end":"17:00","title":"Leave work","notes":"About 1h45 from LA to Paradise Rd, longer with Friday 101 traffic","link":"","opt":false,"id":"i00","u":1791918000000,"by":"grant"},"i01":{"day":"2026-11-06","start":"18:30","end":"","title":"Set up at site 011","notes":"Sunset is about 4:55, so it will be dark. Headlamps handy","link":"","opt":false,"id":"i01","u":1791918000000,"by":"grant"},"i02":{"day":"2026-11-06","start":"19:30","end":"","title":"Dinner at camp","notes":"Something easy to heat and eat","link":"","opt":false,"id":"i02","u":1791918000000,"by":"grant"},"i03":{"day":"2026-11-06","start":"20:30","end":"","title":"Campsite party","notes":"Fire, drinks, music. Quiet hours start at 10 PM","link":"","opt":false,"id":"i03","u":1791918000000,"by":"grant"},"i04":{"day":"2026-11-07","start":"09:45","end":"","title":"Leave camp","notes":"Slow morning, coffee and breakfast at camp","link":"","opt":false,"id":"i04","u":1791918000000,"by":"grant"},"i05":{"day":"2026-11-07","start":"10:30","end":"","title":"Hot Springs & Cold Spring loop (Montecito)","notes":"4.4 mi, about 1,100 ft gain, about 3 hrs with a soak. Lot will be full, so find street parking","link":"https://www.komoot.com/smarttour/e1773851713/hot-springs-and-cold-spring-trail-loop","opt":false,"id":"i05","u":1791918000000,"by":"grant"},"i06":{"day":"2026-11-07","start":"14:00","end":"","title":"Panino Downtown","notes":"Sandwiches to go","link":"","opt":false,"id":"i06","u":1791918000000,"by":"grant"},"i07":{"day":"2026-11-07","start":"14:30","end":"","title":"Mission Rose Garden picnic","notes":"Late lunch on the lawn by the Mission","link":"","opt":false,"id":"i07","u":1791918000000,"by":"grant"},"i08":{"day":"2026-11-07","start":"16:30","end":"","title":"Arroyo Burro Beach sunset","notes":"Sunset about 4:55","link":"","opt":false,"id":"i08","u":1791918000000,"by":"grant"},"i09":{"day":"2026-11-07","start":"18:00","end":"","title":"Dinner at camp","notes":"Cold Spring Tavern doesn't serve dinner","link":"","opt":false,"id":"i09","u":1791918000000,"by":"grant"},"i10":{"day":"2026-11-08","start":"08:30","end":"","title":"Break camp","notes":"Pack the cars first. Check-out is noon","link":"","opt":false,"id":"i10","u":1791918000000,"by":"grant"},"i11":{"day":"2026-11-08","start":"09:30","end":"","title":"Bike to Red Rock + swim","notes":"River Rd is gated at mile 3: 2.5 mi ride, then a 0.5 mi walk to the pools","link":"","opt":false,"id":"i11","u":1791918000000,"by":"grant"},"i12":{"day":"2026-11-08","start":"12:15","end":"16:00","title":"Climbing at Gibraltar Rock","notes":"Take 154 to E. Camino Cielo. Narrow road, park fully in turnouts","link":"","opt":false,"id":"i12","u":1791918000000,"by":"grant"},"i13":{"day":"2026-11-08","start":"16:15","end":"","title":"Cold Spring Tavern","notes":"Tri-tip and Log Cabin Bar until 5 PM. Short detour on the way home","link":"","opt":true,"id":"i13","u":1791918000000,"by":"grant"},"i14":{"day":"2026-11-08","start":"","end":"","title":"Drive home","notes":"154 down to 101 south","link":"","opt":false,"id":"i14","u":1791918000000,"by":"grant"}},"gear":{"s00":{"name":"Tent(s), footprint & stakes","owner":"shared","cat":"Camp","bring":"","car":"","note":"","packed":false,"order":0,"id":"s00","u":1791918000000,"by":"grant"},"s01":{"name":"Firewood","owner":"shared","cat":"Camp","bring":"","car":"","note":"Ry & G with an axe","packed":false,"order":1,"id":"s01","u":1791918000000,"by":"grant"},"s02":{"name":"Axes","owner":"shared","cat":"Camp","bring":"","car":"","note":"","packed":false,"order":2,"id":"s02","u":1791918000000,"by":"grant"},"s03":{"name":"Lantern or string lights","owner":"shared","cat":"Camp","bring":"","car":"","note":"","packed":false,"order":3,"id":"s03","u":1791918000000,"by":"grant"},"s04":{"name":"Tarp","owner":"shared","cat":"Camp","bring":"","car":"","note":"","packed":false,"order":4,"id":"s04","u":1791918000000,"by":"grant"},"s05":{"name":"First-aid kit","owner":"shared","cat":"Camp","bring":"","car":"","note":"","packed":false,"order":5,"id":"s05","u":1791918000000,"by":"grant"},"s06":{"name":"Propane stove + fuel","owner":"shared","cat":"Kitchen","bring":"","car":"","note":"Bring even if fires are allowed","packed":false,"order":6,"id":"s06","u":1791918000000,"by":"grant"},"s07":{"name":"Lighter or matches","owner":"shared","cat":"Kitchen","bring":"","car":"","note":"","packed":false,"order":7,"id":"s07","u":1791918000000,"by":"grant"},"s08":{"name":"Pots, pan & cooking utensils","owner":"shared","cat":"Kitchen","bring":"","car":"","note":"","packed":false,"order":8,"id":"s08","u":1791918000000,"by":"grant"},"s09":{"name":"Coffee setup","owner":"shared","cat":"Kitchen","bring":"","car":"","note":"","packed":false,"order":9,"id":"s09","u":1791918000000,"by":"grant"},"s10":{"name":"Cooler + ice","owner":"shared","cat":"Kitchen","bring":"","car":"","note":"","packed":false,"order":10,"id":"s10","u":1791918000000,"by":"grant"},"s11":{"name":"Water jugs","owner":"shared","cat":"Kitchen","bring":"","car":"","note":"About 2 gal per person per day","packed":false,"order":11,"id":"s11","u":1791918000000,"by":"grant"},"s12":{"name":"Biodegradable soap, sponge, trash bags","owner":"shared","cat":"Kitchen","bring":"","car":"","note":"","packed":false,"order":12,"id":"s12","u":1791918000000,"by":"grant"},"s13":{"name":"Speaker","owner":"shared","cat":"Fun","bring":"both","car":"","note":"","packed":false,"order":13,"id":"s13","u":1791918000000,"by":"grant"},"s14":{"name":"BB guns & BBs","owner":"shared","cat":"Fun","bring":"both","car":"","note":"","packed":false,"order":14,"id":"s14","u":1791918000000,"by":"grant"},"s15":{"name":"Climbing rope","owner":"shared","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":15,"id":"s15","u":1791918000000,"by":"grant"},"s16":{"name":"Quickdraws / rack + anchor material","owner":"shared","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":16,"id":"s16","u":1791918000000,"by":"grant"},"s17":{"name":"Bike rack(s)","owner":"shared","cat":"Bikes","bring":"","car":"","note":"Make sure every bike has a ride","packed":false,"order":17,"id":"s17","u":1791918000000,"by":"grant"},"s18":{"name":"Bike pump & patch kit","owner":"shared","cat":"Bikes","bring":"","car":"","note":"","packed":false,"order":18,"id":"s18","u":1791918000000,"by":"grant"},"s19":{"name":"Adventure Pass","owner":"shared","cat":"Docs","bring":"","car":"","note":"Forest Service parking","packed":false,"order":19,"id":"s19","u":1791918000000,"by":"grant"},"s20":{"name":"Reservation & fire permit","owner":"shared","cat":"Docs","bring":"p:grant","car":"","note":"","packed":false,"order":20,"id":"s20","u":1791918000000,"by":"grant"},"ry00":{"name":"Headlamp + spare batteries","owner":"ryan","cat":"Camp","bring":"","car":"","note":"","packed":false,"order":0,"id":"ry00","u":1791918000000,"by":"grant"},"ry01":{"name":"Sleeping bag rated to about 30F","owner":"ryan","cat":"Camp","bring":"","car":"","note":"","packed":false,"order":1,"id":"ry01","u":1791918000000,"by":"grant"},"ry02":{"name":"Sleeping pad & pillow","owner":"ryan","cat":"Camp","bring":"","car":"","note":"","packed":false,"order":2,"id":"ry02","u":1791918000000,"by":"grant"},"ry03":{"name":"Camp chair","owner":"ryan","cat":"Camp","bring":"","car":"","note":"","packed":false,"order":3,"id":"ry03","u":1791918000000,"by":"grant"},"ry04":{"name":"Plate, bowl, mug & utensils","owner":"ryan","cat":"Camp","bring":"","car":"","note":"","packed":false,"order":4,"id":"ry04","u":1791918000000,"by":"grant"},"ry05":{"name":"Hiking boots","owner":"ryan","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":5,"id":"ry05","u":1791918000000,"by":"grant"},"ry06":{"name":"Bathing suit","owner":"ryan","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":6,"id":"ry06","u":1791918000000,"by":"grant"},"ry07":{"name":"Quick-dry towel","owner":"ryan","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":7,"id":"ry07","u":1791918000000,"by":"grant"},"ry08":{"name":"Sandals for the pools and creek","owner":"ryan","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":8,"id":"ry08","u":1791918000000,"by":"grant"},"ry09":{"name":"Daypack","owner":"ryan","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":9,"id":"ry09","u":1791918000000,"by":"grant"},"ry10":{"name":"Water bottle or bladder (2 L)","owner":"ryan","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":10,"id":"ry10","u":1791918000000,"by":"grant"},"ry11":{"name":"Trail snacks","owner":"ryan","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":11,"id":"ry11","u":1791918000000,"by":"grant"},"ry12":{"name":"Sunscreen, hat & sunglasses","owner":"ryan","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":12,"id":"ry12","u":1791918000000,"by":"grant"},"ry13":{"name":"Bike, helmet & lock","owner":"ryan","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":13,"id":"ry13","u":1791918000000,"by":"grant"},"ry14":{"name":"Harness","owner":"ryan","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":14,"id":"ry14","u":1791918000000,"by":"grant"},"ry15":{"name":"Climbing shoes","owner":"ryan","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":15,"id":"ry15","u":1791918000000,"by":"grant"},"ry16":{"name":"Helmet","owner":"ryan","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":16,"id":"ry16","u":1791918000000,"by":"grant"},"ry17":{"name":"Chalk bag","owner":"ryan","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":17,"id":"ry17","u":1791918000000,"by":"grant"},"ry18":{"name":"Belay device + locking carabiner","owner":"ryan","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":18,"id":"ry18","u":1791918000000,"by":"grant"},"ry19":{"name":"Tape & hand balm","owner":"ryan","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":19,"id":"ry19","u":1791918000000,"by":"grant"},"ry20":{"name":"Base layer","owner":"ryan","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":20,"id":"ry20","u":1791918000000,"by":"grant"},"ry21":{"name":"Fleece","owner":"ryan","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":21,"id":"ry21","u":1791918000000,"by":"grant"},"ry22":{"name":"Puffy jacket","owner":"ryan","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":22,"id":"ry22","u":1791918000000,"by":"grant"},"ry23":{"name":"Rain or wind shell","owner":"ryan","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":23,"id":"ry23","u":1791918000000,"by":"grant"},"ry24":{"name":"Beanie","owner":"ryan","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":24,"id":"ry24","u":1791918000000,"by":"grant"},"ry25":{"name":"Wool socks (extra pair for after the creek)","owner":"ryan","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":25,"id":"ry25","u":1791918000000,"by":"grant"},"ry26":{"name":"Pants & shorts","owner":"ryan","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":26,"id":"ry26","u":1791918000000,"by":"grant"},"ry27":{"name":"Sleep clothes","owner":"ryan","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":27,"id":"ry27","u":1791918000000,"by":"grant"},"ry28":{"name":"Camp shoes/tevas","owner":"ryan","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":28,"id":"ry28","u":1791918000000,"by":"grant"},"ry29":{"name":"ID, cards & some cash","owner":"ryan","cat":"Docs & tech","bring":"","car":"","note":"","packed":false,"order":29,"id":"ry29","u":1791918000000,"by":"grant"},"ry30":{"name":"Offline maps downloaded (spotty service at camp and Gibraltar)","owner":"ryan","cat":"Docs & tech","bring":"","car":"","note":"","packed":false,"order":30,"id":"ry30","u":1791918000000,"by":"grant"},"ry31":{"name":"Toiletries & meds","owner":"ryan","cat":"Docs & tech","bring":"","car":"","note":"","packed":false,"order":31,"id":"ry31","u":1791918000000,"by":"grant"},"ry32":{"name":"Phone charger + power bank","owner":"ryan","cat":"Docs & tech","bring":"","car":"","note":"","packed":false,"order":32,"id":"ry32","u":1791918000000,"by":"grant"},"ea00":{"name":"Headlamp + spare batteries","owner":"earl","cat":"Camp","bring":"","car":"","note":"","packed":false,"order":0,"id":"ea00","u":1791918000000,"by":"grant"},"ea01":{"name":"Sleeping bag rated to about 30F","owner":"earl","cat":"Camp","bring":"","car":"","note":"","packed":false,"order":1,"id":"ea01","u":1791918000000,"by":"grant"},"ea02":{"name":"Sleeping pad & pillow","owner":"earl","cat":"Camp","bring":"","car":"","note":"","packed":false,"order":2,"id":"ea02","u":1791918000000,"by":"grant"},"ea03":{"name":"Camp chair","owner":"earl","cat":"Camp","bring":"","car":"","note":"","packed":false,"order":3,"id":"ea03","u":1791918000000,"by":"grant"},"ea04":{"name":"Plate, bowl, mug & utensils","owner":"earl","cat":"Camp","bring":"","car":"","note":"","packed":false,"order":4,"id":"ea04","u":1791918000000,"by":"grant"},"ea05":{"name":"Hiking boots","owner":"earl","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":5,"id":"ea05","u":1791918000000,"by":"grant"},"ea06":{"name":"Bathing suit","owner":"earl","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":6,"id":"ea06","u":1791918000000,"by":"grant"},"ea07":{"name":"Quick-dry towel","owner":"earl","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":7,"id":"ea07","u":1791918000000,"by":"grant"},"ea08":{"name":"Sandals for the pools and creek","owner":"earl","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":8,"id":"ea08","u":1791918000000,"by":"grant"},"ea09":{"name":"Daypack","owner":"earl","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":9,"id":"ea09","u":1791918000000,"by":"grant"},"ea10":{"name":"Water bottle or bladder (2 L)","owner":"earl","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":10,"id":"ea10","u":1791918000000,"by":"grant"},"ea11":{"name":"Trail snacks","owner":"earl","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":11,"id":"ea11","u":1791918000000,"by":"grant"},"ea12":{"name":"Sunscreen, hat & sunglasses","owner":"earl","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":12,"id":"ea12","u":1791918000000,"by":"grant"},"ea13":{"name":"Bike, helmet & lock","owner":"earl","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":13,"id":"ea13","u":1791918000000,"by":"grant"},"ea14":{"name":"Harness","owner":"earl","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":14,"id":"ea14","u":1791918000000,"by":"grant"},"ea15":{"name":"Climbing shoes","owner":"earl","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":15,"id":"ea15","u":1791918000000,"by":"grant"},"ea16":{"name":"Helmet","owner":"earl","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":16,"id":"ea16","u":1791918000000,"by":"grant"},"ea17":{"name":"Chalk bag","owner":"earl","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":17,"id":"ea17","u":1791918000000,"by":"grant"},"ea18":{"name":"Belay device + locking carabiner","owner":"earl","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":18,"id":"ea18","u":1791918000000,"by":"grant"},"ea19":{"name":"Tape & hand balm","owner":"earl","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":19,"id":"ea19","u":1791918000000,"by":"grant"},"ea20":{"name":"Base layer","owner":"earl","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":20,"id":"ea20","u":1791918000000,"by":"grant"},"ea21":{"name":"Fleece","owner":"earl","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":21,"id":"ea21","u":1791918000000,"by":"grant"},"ea22":{"name":"Puffy jacket","owner":"earl","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":22,"id":"ea22","u":1791918000000,"by":"grant"},"ea23":{"name":"Rain or wind shell","owner":"earl","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":23,"id":"ea23","u":1791918000000,"by":"grant"},"ea24":{"name":"Beanie","owner":"earl","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":24,"id":"ea24","u":1791918000000,"by":"grant"},"ea25":{"name":"Wool socks (extra pair for after the creek)","owner":"earl","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":25,"id":"ea25","u":1791918000000,"by":"grant"},"ea26":{"name":"Pants & shorts","owner":"earl","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":26,"id":"ea26","u":1791918000000,"by":"grant"},"ea27":{"name":"Sleep clothes","owner":"earl","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":27,"id":"ea27","u":1791918000000,"by":"grant"},"ea28":{"name":"Camp shoes/tevas","owner":"earl","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":28,"id":"ea28","u":1791918000000,"by":"grant"},"ea29":{"name":"ID, cards & some cash","owner":"earl","cat":"Docs & tech","bring":"","car":"","note":"","packed":false,"order":29,"id":"ea29","u":1791918000000,"by":"grant"},"ea30":{"name":"Offline maps downloaded (spotty service at camp and Gibraltar)","owner":"earl","cat":"Docs & tech","bring":"","car":"","note":"","packed":false,"order":30,"id":"ea30","u":1791918000000,"by":"grant"},"ea31":{"name":"Toiletries & meds","owner":"earl","cat":"Docs & tech","bring":"","car":"","note":"","packed":false,"order":31,"id":"ea31","u":1791918000000,"by":"grant"},"ea32":{"name":"Phone charger + power bank","owner":"earl","cat":"Docs & tech","bring":"","car":"","note":"","packed":false,"order":32,"id":"ea32","u":1791918000000,"by":"grant"},"gr00":{"name":"Headlamp + spare batteries","owner":"grant","cat":"Camp","bring":"","car":"","note":"","packed":false,"order":0,"id":"gr00","u":1791918000000,"by":"grant"},"gr01":{"name":"Sleeping bag rated to about 30F","owner":"grant","cat":"Camp","bring":"","car":"","note":"","packed":false,"order":1,"id":"gr01","u":1791918000000,"by":"grant"},"gr02":{"name":"Sleeping pad & pillow","owner":"grant","cat":"Camp","bring":"","car":"","note":"","packed":false,"order":2,"id":"gr02","u":1791918000000,"by":"grant"},"gr03":{"name":"Camp chair","owner":"grant","cat":"Camp","bring":"","car":"","note":"","packed":false,"order":3,"id":"gr03","u":1791918000000,"by":"grant"},"gr04":{"name":"Plate, bowl, mug & utensils","owner":"grant","cat":"Camp","bring":"","car":"","note":"","packed":false,"order":4,"id":"gr04","u":1791918000000,"by":"grant"},"gr05":{"name":"Hiking boots","owner":"grant","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":5,"id":"gr05","u":1791918000000,"by":"grant"},"gr06":{"name":"Bathing suit","owner":"grant","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":6,"id":"gr06","u":1791918000000,"by":"grant"},"gr07":{"name":"Quick-dry towel","owner":"grant","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":7,"id":"gr07","u":1791918000000,"by":"grant"},"gr08":{"name":"Sandals for the pools and creek","owner":"grant","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":8,"id":"gr08","u":1791918000000,"by":"grant"},"gr09":{"name":"Daypack","owner":"grant","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":9,"id":"gr09","u":1791918000000,"by":"grant"},"gr10":{"name":"Water bottle or bladder (2 L)","owner":"grant","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":10,"id":"gr10","u":1791918000000,"by":"grant"},"gr11":{"name":"Trail snacks","owner":"grant","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":11,"id":"gr11","u":1791918000000,"by":"grant"},"gr12":{"name":"Sunscreen, hat & sunglasses","owner":"grant","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":12,"id":"gr12","u":1791918000000,"by":"grant"},"gr13":{"name":"Bike, helmet & lock","owner":"grant","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":13,"id":"gr13","u":1791918000000,"by":"grant"},"gr14":{"name":"Harness","owner":"grant","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":14,"id":"gr14","u":1791918000000,"by":"grant"},"gr15":{"name":"Climbing shoes","owner":"grant","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":15,"id":"gr15","u":1791918000000,"by":"grant"},"gr16":{"name":"Helmet","owner":"grant","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":16,"id":"gr16","u":1791918000000,"by":"grant"},"gr17":{"name":"Chalk bag","owner":"grant","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":17,"id":"gr17","u":1791918000000,"by":"grant"},"gr18":{"name":"Belay device + locking carabiner","owner":"grant","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":18,"id":"gr18","u":1791918000000,"by":"grant"},"gr19":{"name":"Tape & hand balm","owner":"grant","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":19,"id":"gr19","u":1791918000000,"by":"grant"},"gr20":{"name":"Base layer","owner":"grant","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":20,"id":"gr20","u":1791918000000,"by":"grant"},"gr21":{"name":"Fleece","owner":"grant","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":21,"id":"gr21","u":1791918000000,"by":"grant"},"gr22":{"name":"Puffy jacket","owner":"grant","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":22,"id":"gr22","u":1791918000000,"by":"grant"},"gr23":{"name":"Rain or wind shell","owner":"grant","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":23,"id":"gr23","u":1791918000000,"by":"grant"},"gr24":{"name":"Beanie","owner":"grant","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":24,"id":"gr24","u":1791918000000,"by":"grant"},"gr25":{"name":"Wool socks (extra pair for after the creek)","owner":"grant","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":25,"id":"gr25","u":1791918000000,"by":"grant"},"gr26":{"name":"Pants & shorts","owner":"grant","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":26,"id":"gr26","u":1791918000000,"by":"grant"},"gr27":{"name":"Sleep clothes","owner":"grant","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":27,"id":"gr27","u":1791918000000,"by":"grant"},"gr28":{"name":"Camp shoes/tevas","owner":"grant","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":28,"id":"gr28","u":1791918000000,"by":"grant"},"gr29":{"name":"ID, cards & some cash","owner":"grant","cat":"Docs & tech","bring":"","car":"","note":"","packed":false,"order":29,"id":"gr29","u":1791918000000,"by":"grant"},"gr30":{"name":"Offline maps downloaded (spotty service at camp and Gibraltar)","owner":"grant","cat":"Docs & tech","bring":"","car":"","note":"","packed":false,"order":30,"id":"gr30","u":1791918000000,"by":"grant"},"gr31":{"name":"Toiletries & meds","owner":"grant","cat":"Docs & tech","bring":"","car":"","note":"","packed":false,"order":31,"id":"gr31","u":1791918000000,"by":"grant"},"gr32":{"name":"Phone charger + power bank","owner":"grant","cat":"Docs & tech","bring":"","car":"","note":"","packed":false,"order":32,"id":"gr32","u":1791918000000,"by":"grant"},"ca00":{"name":"Headlamp + spare batteries","owner":"cassie","cat":"Camp","bring":"","car":"","note":"","packed":false,"order":0,"id":"ca00","u":1791918000000,"by":"grant"},"ca01":{"name":"Sleeping bag rated to about 30F","owner":"cassie","cat":"Camp","bring":"","car":"","note":"","packed":false,"order":1,"id":"ca01","u":1791918000000,"by":"grant"},"ca02":{"name":"Sleeping pad & pillow","owner":"cassie","cat":"Camp","bring":"","car":"","note":"","packed":false,"order":2,"id":"ca02","u":1791918000000,"by":"grant"},"ca03":{"name":"Camp chair","owner":"cassie","cat":"Camp","bring":"","car":"","note":"","packed":false,"order":3,"id":"ca03","u":1791918000000,"by":"grant"},"ca04":{"name":"Plate, bowl, mug & utensils","owner":"cassie","cat":"Camp","bring":"","car":"","note":"","packed":false,"order":4,"id":"ca04","u":1791918000000,"by":"grant"},"ca05":{"name":"Hiking boots","owner":"cassie","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":5,"id":"ca05","u":1791918000000,"by":"grant"},"ca06":{"name":"Bathing suit","owner":"cassie","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":6,"id":"ca06","u":1791918000000,"by":"grant"},"ca07":{"name":"Quick-dry towel","owner":"cassie","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":7,"id":"ca07","u":1791918000000,"by":"grant"},"ca08":{"name":"Sandals for the pools and creek","owner":"cassie","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":8,"id":"ca08","u":1791918000000,"by":"grant"},"ca09":{"name":"Daypack","owner":"cassie","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":9,"id":"ca09","u":1791918000000,"by":"grant"},"ca10":{"name":"Water bottle or bladder (2 L)","owner":"cassie","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":10,"id":"ca10","u":1791918000000,"by":"grant"},"ca11":{"name":"Trail snacks","owner":"cassie","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":11,"id":"ca11","u":1791918000000,"by":"grant"},"ca12":{"name":"Sunscreen, hat & sunglasses","owner":"cassie","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":12,"id":"ca12","u":1791918000000,"by":"grant"},"ca13":{"name":"Bike, helmet & lock","owner":"cassie","cat":"Hike & Red Rock","bring":"","car":"","note":"","packed":false,"order":13,"id":"ca13","u":1791918000000,"by":"grant"},"ca14":{"name":"Harness","owner":"cassie","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":14,"id":"ca14","u":1791918000000,"by":"grant"},"ca15":{"name":"Climbing shoes","owner":"cassie","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":15,"id":"ca15","u":1791918000000,"by":"grant"},"ca16":{"name":"Helmet","owner":"cassie","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":16,"id":"ca16","u":1791918000000,"by":"grant"},"ca17":{"name":"Chalk bag","owner":"cassie","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":17,"id":"ca17","u":1791918000000,"by":"grant"},"ca18":{"name":"Belay device + locking carabiner","owner":"cassie","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":18,"id":"ca18","u":1791918000000,"by":"grant"},"ca19":{"name":"Tape & hand balm","owner":"cassie","cat":"Climbing","bring":"","car":"","note":"","packed":false,"order":19,"id":"ca19","u":1791918000000,"by":"grant"},"ca20":{"name":"Base layer","owner":"cassie","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":20,"id":"ca20","u":1791918000000,"by":"grant"},"ca21":{"name":"Fleece","owner":"cassie","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":21,"id":"ca21","u":1791918000000,"by":"grant"},"ca22":{"name":"Puffy jacket","owner":"cassie","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":22,"id":"ca22","u":1791918000000,"by":"grant"},"ca23":{"name":"Rain or wind shell","owner":"cassie","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":23,"id":"ca23","u":1791918000000,"by":"grant"},"ca24":{"name":"Beanie","owner":"cassie","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":24,"id":"ca24","u":1791918000000,"by":"grant"},"ca25":{"name":"Wool socks (extra pair for after the creek)","owner":"cassie","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":25,"id":"ca25","u":1791918000000,"by":"grant"},"ca26":{"name":"Pants & shorts","owner":"cassie","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":26,"id":"ca26","u":1791918000000,"by":"grant"},"ca27":{"name":"Sleep clothes","owner":"cassie","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":27,"id":"ca27","u":1791918000000,"by":"grant"},"ca28":{"name":"Camp shoes/tevas","owner":"cassie","cat":"Clothes","bring":"","car":"","note":"","packed":false,"order":28,"id":"ca28","u":1791918000000,"by":"grant"},"ca29":{"name":"ID, cards & some cash","owner":"cassie","cat":"Docs & tech","bring":"","car":"","note":"","packed":false,"order":29,"id":"ca29","u":1791918000000,"by":"grant"},"ca30":{"name":"Offline maps downloaded (spotty service at camp and Gibraltar)","owner":"cassie","cat":"Docs & tech","bring":"","car":"","note":"","packed":false,"order":30,"id":"ca30","u":1791918000000,"by":"grant"},"ca31":{"name":"Toiletries & meds","owner":"cassie","cat":"Docs & tech","bring":"","car":"","note":"","packed":false,"order":31,"id":"ca31","u":1791918000000,"by":"grant"},"ca32":{"name":"Phone charger + power bank","owner":"cassie","cat":"Docs & tech","bring":"","car":"","note":"","packed":false,"order":32,"id":"ca32","u":1791918000000,"by":"grant"}},"meals":{"m0":{"day":"2026-11-06","meal":"Dinner","title":"Easy heat-and-eat","cook":"","notes":"Arriving after dark","id":"m0","u":1791918000000,"by":"grant"},"m1":{"day":"2026-11-07","meal":"Breakfast","title":"","cook":"","notes":"Slow morning at camp","id":"m1","u":1791918000000,"by":"grant"},"m2":{"day":"2026-11-07","meal":"Lunch","title":"Panino sandwiches","cook":"out","notes":"Picked up from Panino Downtown. Picnic at the Rose Garden","id":"m2","u":1791918000000,"by":"grant"},"m3":{"day":"2026-11-07","meal":"Dinner","title":"Burgers or sausages","cook":"","notes":"Over the fire if fires are OK, stove if not","id":"m3","u":1791918000000,"by":"grant"},"m4":{"day":"2026-11-08","meal":"Breakfast","title":"","cook":"","notes":"Quick, before breaking camp","id":"m4","u":1791918000000,"by":"grant"},"m5":{"day":"2026-11-08","meal":"Lunch","title":"Snacks at Gibraltar","cook":"","notes":"","id":"m5","u":1791918000000,"by":"grant"}},"groc":{"g0":{"name":"Ice","qty":"2 bags","buyer":"","bought":false,"id":"g0","u":1791918000000,"by":"grant"},"g1":{"name":"Coffee","qty":"","buyer":"","bought":false,"id":"g1","u":1791918000000,"by":"grant"},"g2":{"name":"Burgers or sausages + buns","qty":"for 4","buyer":"","bought":false,"id":"g2","u":1791918000000,"by":"grant"},"g3":{"name":"Breakfast supplies","qty":"2 mornings","buyer":"","bought":false,"id":"g3","u":1791918000000,"by":"grant"},"g4":{"name":"Drinking water","qty":"about 16 gal","buyer":"","bought":false,"id":"g4","u":1791918000000,"by":"grant"},"g5":{"name":"Trail snacks","qty":"","buyer":"","bought":false,"id":"g5","u":1791918000000,"by":"grant"}},"exp":{"e0":{"desc":"Campsite reservation","cents":9200,"paid":"grant","split":["ryan","earl","grant","cassie"],"date":"2026-10-13","note":"Paradise site 011, two nights","id":"e0","u":1791918000000,"by":"grant"},"e1":{"desc":"Extra car fee, Fri night","cents":1000,"paid":"grant","split":["ryan","earl","grant","cassie"],"date":"2026-11-06","note":"Second car, $10 per night. Confirm the fee and who pays with the ranger district","id":"e1","u":1791918000000,"by":"grant"},"e2":{"desc":"Extra car fee, Sat night","cents":1000,"paid":"grant","split":["ryan","earl","grant","cassie"],"date":"2026-11-07","note":"Second car, $10 per night. Confirm the fee and who pays with the ranger district","id":"e2","u":1791918000000,"by":"grant"}},"photos":{},"notes":{"n0":{"text":"Bofa' means both cars: Ryan & Earl, and Grant & Cassie.","at":1791918000000,"id":"n0","u":1791918000000,"by":"grant"}},"act":{}}};
+const PFX = 'sbct:';
+const LIMIT = 900 * 1024;
+const ITER = 200000;
+const PEOPLE = {ryan:'Ryan', earl:'Earl', grant:'Grant', cassie:'Cassie'};
+const PORDER = ['ryan','earl','grant','cassie'];
+const COLS = ['trip','heads','itin','gear','meals','groc','exp','photos','notes','act'];
+const SHARED_CATS = ['Camp','Kitchen','Food','Fun','Climbing','Bikes','Docs'];
+const PERSONAL_CATS = ['Camp','Hike & Red Rock','Climbing','Clothes','Docs & tech'];
+const MEALS = ['Breakfast','Lunch','Dinner','Snacks'];
+
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clone = o => JSON.parse(JSON.stringify(o));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+const now = () => Date.now();
+
+/* ---------- Storage (every key prefixed sbct:) ---------- */
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(PFX + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(PFX + k, JSON.stringify(v)); return true; } catch (e) { return false; } },
+  del(k) { try { localStorage.removeItem(PFX + k); } catch (e) {} },
+  clearMine() {
+    try { const ks = []; for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.indexOf(PFX) === 0) ks.push(k); } ks.forEach(k => localStorage.removeItem(k)); } catch (e) {}
+  }
+};
+
+/* ---------- Mode ---------- */
+function detectMode() {
+  const h = location.hostname;
+  if (/\.github\.io$/i.test(h)) return 'cloud';
+  let framed = false; try { framed = window.self !== window.top; } catch (e) { framed = true; }
+  if (/claude\.ai$|claudeusercontent\.com$|anthropic\.com$|claude\.site$/i.test(h) || framed) return 'artifact';
+  return 'local';
+}
+const MODE = detectMode();
+function repoInfo() {
+  const owner = location.hostname.split('.')[0];
+  const seg = location.pathname.split('/').filter(Boolean)[0];
+  const repo = seg && !/\.html?$/i.test(seg) ? seg : owner + '.github.io';
+  return {owner, repo};
+}
+const REPO = MODE === 'cloud' ? repoInfo() : null;
+
+/* ---------- Crypto: AES-GCM, PBKDF2-SHA256 200k ---------- */
+const te = new TextEncoder(), td = new TextDecoder();
+function b64e(u8) { let s = ''; for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(s); }
+function b64d(b) { const s = atob(String(b).replace(/\s/g, '')); const u = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i); return u; }
+const keyCache = new Map();
+async function deriveKey(pass, salt, iter) {
+  const ck = iter + '|' + b64e(salt) + '|' + pass;
+  if (keyCache.has(ck)) return keyCache.get(ck);
+  const base = await crypto.subtle.importKey('raw', te.encode(pass), 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey({name:'PBKDF2', salt, iterations:iter, hash:'SHA-256'}, base, {name:'AES-GCM', length:256}, false, ['encrypt','decrypt']);
+  keyCache.set(ck, key);
+  return key;
+}
+let sessSalt = null;
+async function encryptObj(obj, pass) {
+  if (!sessSalt || sessSalt.pass !== pass) sessSalt = {pass, salt: crypto.getRandomValues(new Uint8Array(16))};
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const key = await deriveKey(pass, sessSalt.salt, ITER);
+  const ct = new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM', iv}, key, te.encode(JSON.stringify(obj))));
+  return {sbct:1, alg:'AES-GCM', kdf:'PBKDF2-SHA256', iter:ITER, salt:b64e(sessSalt.salt), iv:b64e(iv), ct:b64e(ct)};
+}
+async function decryptObj(env, pass) {
+  const key = await deriveKey(pass, b64d(env.salt), env.iter || ITER);
+  const pt = await crypto.subtle.decrypt({name:'AES-GCM', iv:b64d(env.iv)}, key, b64d(env.ct));
+  return JSON.parse(td.decode(pt));
+}
+
+/* ---------- GitHub contents API ---------- */
+const API = 'https://api.github.com';
+function ghUrl(path) { return API + '/repos/' + encodeURIComponent(REPO.owner) + '/' + encodeURIComponent(REPO.repo) + '/contents/' + path; }
+function ghHdr(token) { const h = {'Accept':'application/vnd.github+json'}; if (token) h.Authorization = 'Bearer ' + token; return h; }
+function httpErr(status, msg) { const e = new Error(msg || ('HTTP ' + status)); e.status = status; return e; }
+async function ghRead(path, token, raw) {
+  const r = await fetch(ghUrl(path) + '?t=' + now(), {cache:'no-store', headers:ghHdr(token)});
+  if (r.status === 404) return null;
+  if (!r.ok) throw httpErr(r.status, await r.text());
+  const j = await r.json();
+  return {sha:j.sha, text: raw ? '' : td.decode(b64d(j.content || ''))};
+}
+async function ghWriteB64(path, b64, sha, message, token) {
+  const body = {message, content:b64};
+  if (sha) body.sha = sha;
+  const r = await fetch(ghUrl(path), {method:'PUT', cache:'no-store', headers:Object.assign(ghHdr(token), {'Content-Type':'application/json'}), body:JSON.stringify(body)});
+  if (!r.ok) throw httpErr(r.status, await r.text());
+  const j = await r.json();
+  return j.content.sha;
+}
+const ghWrite = (path, text, sha, msg, token) => ghWriteB64(path, b64e(te.encode(text)), sha, msg, token);
+async function ghDelete(path, sha, message, token) {
+  const r = await fetch(ghUrl(path), {method:'DELETE', cache:'no-store', headers:Object.assign(ghHdr(token), {'Content-Type':'application/json'}), body:JSON.stringify({message, sha})});
+  if (!r.ok && r.status !== 404) throw httpErr(r.status, await r.text());
+}
+
+/* ---------- Photo store: each photo is its own encrypted file, photos/<id>.json ---------- */
+const PHOTO_MAX = 1600, THUMB_MAX = 360, ENV_MAX = 900 * 1024, PURGE_MS = 10 * 60 * 1000;
+const photoPath = id => 'photos/' + id + '.json';       // full size, up to 1600px
+const thumbPath = id => 'photos/' + id + '-t.json';     // grid thumbnail, 360px
+const IDB = (() => {
+  let dbp = null; const mem = {img:{}, pending:{}};
+  function db() {
+    if (!dbp) dbp = new Promise((res, rej) => {
+      try { const r = indexedDB.open('sbct-photos', 1);
+        r.onupgradeneeded = () => { r.result.createObjectStore('img'); r.result.createObjectStore('pending'); };
+        r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); } catch (e) { rej(e); }
+    });
+    return dbp;
+  }
+  async function op(store, mode, fn, memfn) {
+    try { const d = await db(); return await new Promise((res, rej) => { const tx = d.transaction(store, mode); const rq = fn(tx.objectStore(store)); tx.oncomplete = () => res(rq ? rq.result : undefined); tx.onerror = () => rej(tx.error); }); }
+    catch (e) { return memfn(mem[store]); }
+  }
+  return {
+    get: (s, k) => op(s, 'readonly', st => st.get(k), m => m[k]),
+    put: (s, k, v) => op(s, 'readwrite', st => st.put(v, k), m => { m[k] = v; }),
+    del: (s, k) => op(s, 'readwrite', st => st.delete(k), m => { delete m[k]; }),
+    keys: s => op(s, 'readonly', st => st.getAllKeys(), m => Object.keys(m)),
+    wipe: () => new Promise(res => { try { if (dbp) dbp.then(d => d.close()).catch(() => {}); const r = indexedDB.deleteDatabase('sbct-photos'); r.onsuccess = r.onerror = r.onblocked = () => res(); } catch (e) { res(); } })
+  };
+})();
+const FULL = {}, THUMB = {};  // id -> data URL, in memory
+const photoState = {};       // id -> 'loading' | 'missing' (thumbnail); 'f:'+id for full size
+let pendingCount = 0;
+async function refreshPending() { try { pendingCount = (await IDB.keys('pending')).length; } catch (e) { pendingCount = 0; } updatePill(); }
+async function pendingOf(id) { const v = await IDB.get('pending', id); return typeof v === 'string' ? {img:v} : v; }
+async function fetchPhotoFile(path) {
+  if (MODE !== 'cloud' || !CFG || !CFG.token || syncState.locked) return null;
+  const f = await ghRead(path, CFG.token);
+  return f ? (await decryptObj(JSON.parse(f.text), CFG.pass)).img : null;
+}
+async function ensureFull(id) {
+  if (FULL[id] || photoState['f:' + id] === 'loading') return FULL[id];
+  photoState['f:' + id] = 'loading';
+  try {
+    let img = await IDB.get('img', id); const pend = img ? null : await pendingOf(id);
+    if (!img && pend) img = pend.img;
+    if (!img) { img = await fetchPhotoFile(photoPath(id)); if (img) await IDB.put('img', id, img); }
+    if (img) { FULL[id] = img; delete photoState['f:' + id]; } else photoState['f:' + id] = 'missing';
+  } catch (e) { photoState['f:' + id] = 'missing'; }
+  return FULL[id];
+}
+async function ensureThumb(id) {
+  if (THUMB[id] || photoState[id] === 'loading') return;
+  photoState[id] = 'loading';
+  try {
+    let t = await IDB.get('img', id + '#t'); const pend = t ? null : await pendingOf(id);
+    if (!t && pend) t = pend.thumb || pend.img;
+    if (!t) { t = await fetchPhotoFile(thumbPath(id)); if (t) await IDB.put('img', id + '#t', t); }
+    if (!t) t = await ensureFull(id);          // older photos have no thumbnail file
+    if (t) { THUMB[id] = t; delete photoState[id]; paintPhoto(id); } else photoState[id] = 'missing';
+  } catch (e) { photoState[id] = 'missing'; }
+}
+function paintPhoto(id) {
+  document.querySelectorAll('[data-ph="' + id + '"]').forEach(el => { el.innerHTML = '<img src="' + (THUMB[id] || FULL[id]) + '" alt="" loading="lazy">'; });
+}
+async function uploadPending() {
+  if (MODE !== 'cloud' || !CFG || !CFG.token || syncState.locked) return;
+  const ids = await IDB.keys('pending');
+  for (const id of ids) {
+    const v = await pendingOf(id); if (!v || !v.img) continue;
+    const parts = (v.thumb ? [[thumbPath(id), v.thumb]] : []).concat([[photoPath(id), v.img]]);   // thumbnail first so other phones see it sooner
+    for (const [path, img] of parts) {
+      try { await ghWrite(path, JSON.stringify(await encryptObj({img}, CFG.pass)), null, pname(me()) + ' uploaded a photo', CFG.token); }
+      catch (e) { if (e.status !== 422) throw e; }   // 422: file already exists, so it was uploaded before
+    }
+    await IDB.put('img', id, v.img); if (v.thumb) await IDB.put('img', id + '#t', v.thumb);
+    await IDB.del('pending', id);
+  }
+  await refreshPending();
+}
+async function purgeDeletedPhotos() {
+  if (MODE !== 'cloud' || !CFG || !CFG.token) return;
+  const old = Object.values(S.col.photos).filter(p => p.del && p.file && !p.purged && now() - (p.u || 0) > PURGE_MS);
+  for (const p of old) {
+    for (const path of [thumbPath(p.id), photoPath(p.id)]) {
+      const f = await ghRead(path, CFG.token, true);
+      if (f) await ghDelete(path, f.sha, pname(me()) + ' removed a deleted photo', CFG.token);
+    }
+    await IDB.del('img', p.id); await IDB.del('img', p.id + '#t'); delete FULL[p.id]; delete THUMB[p.id];
+    p.purged = true; p.u = now(); editSeq++; store.set('cache', {state:S, sha:SHA}); store.set('dirty', true); syncState.again = true;
+  }
+}
+
+/* ---------- State ---------- */
+function emptyState() {
+  const s = {v:1, people:clone(PEOPLE), cars:{car1:{label:'Car 1', who:['ryan','earl']}, car2:{label:'Car 2', who:['grant','cassie']}}, col:{}};
+  COLS.forEach(c => s.col[c] = {});
+  s.col.trip.main = {id:'main', name:'SB Camping Trip', start:'', end:'', u:0, by:''};
+  return s;
+}
+function upgrade(s) {
+  if (!s || typeof s !== 'object') return emptyState();
+  if (!s.v) s.v = 1;
+  if (!s.people) s.people = clone(PEOPLE);
+  if (!s.cars) s.cars = emptyState().cars;
+  if (!s.col) s.col = {};
+  COLS.forEach(c => { if (!s.col[c]) s.col[c] = {}; });
+  if (!s.col.trip.main) s.col.trip.main = emptyState().col.trip.main;
+  return s;
+}
+function newer(a, b) {
+  if (!a) return b; if (!b) return a;
+  if ((a.u || 0) !== (b.u || 0)) return (a.u || 0) > (b.u || 0) ? a : b;
+  return JSON.stringify(a) >= JSON.stringify(b) ? a : b;
+}
+function merge(a, b) {
+  a = upgrade(clone(a)); b = upgrade(b);
+  const out = {v:Math.max(a.v, b.v || 1), people:Object.assign({}, a.people, b.people), cars:Object.assign({}, a.cars, b.cars), col:{}};
+  COLS.forEach(c => {
+    const A = a.col[c] || {}, B = b.col[c] || {}, o = {};
+    new Set(Object.keys(A).concat(Object.keys(B))).forEach(id => { o[id] = clone(newer(A[id], B[id])); });
+    out.col[c] = o;
+  });
+  pruneAct(out);
+  return out;
+}
+function pruneAct(s) {
+  const ids = Object.keys(s.col.act).sort((x, y) => (s.col.act[y].at || 0) - (s.col.act[x].at || 0));
+  ids.slice(250).forEach(id => delete s.col.act[id]);
+}
+function sameData(a, b) { return JSON.stringify(canon(a)) === JSON.stringify(canon(b)); }
+function canon(s) {
+  const o = {v:s.v, col:{}};
+  COLS.forEach(c => { const m = s.col[c] || {}; o.col[c] = Object.keys(m).sort().map(k => m[k]); });
+  return o;
+}
+const live = c => Object.values(S.col[c] || {}).filter(r => r && !r.del);
+
+/* ---------- App globals ---------- */
+let S = null, SHA = null;
+let CFG = store.get('cfg', null);            // cloud: {me, pass, token}
+let PREFS = store.get('prefs', {h24:false});
+let TAB = store.get('tab', 'trip');
+let GEARVIEW = store.get('gearview', 'shared');
+let editSeq = 0;
+let syncState = {busy:false, again:false, last:store.get('lastsync', null), err:'', offline:false, locked:false};
+
+function me() { return MODE === 'cloud' ? (CFG && CFG.me) : store.get('me', null); }
+function pname(id) { return (S && S.people && S.people[id]) || PEOPLE[id] || id; }
+function carWho(c) { const car = S.cars[c]; return car ? car.who.map(pname).join(' & ') : c; }
+function whoLabel(v) {
+  if (!v) return '';
+  if (v === 'both') return "Both cars (Bofa')";
+  if (v === 'out') return 'Restaurant, no cook needed';
+  if (v.indexOf('p:') === 0) return pname(v.slice(2));
+  if (v.indexOf('c:') === 0) return carWho(v.slice(2));
+  return v;
+}
+function whoOptions(blank) {
+  const o = [];
+  if (blank) o.push(['', blank]);
+  PORDER.forEach(p => o.push(['p:' + p, pname(p)]));
+  o.push(['c:car1', carWho('car1') + ' (car 1)'], ['c:car2', carWho('car2') + ' (car 2)'], ['both', "Both cars (Bofa')"]);
+  return o;
+}
+
+/* ---------- Formatting ---------- */
+function fmtTime(t) {
+  if (!t) return '';
+  const [h, m] = t.split(':').map(Number);
+  if (PREFS.h24) return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+  const ap = h >= 12 ? 'PM' : 'AM'; const hh = h % 12 || 12;
+  return hh + ':' + String(m).padStart(2, '0') + ' ' + ap;
+}
+function fmtStamp(ms) {
+  if (!ms) return '';
+  const d = new Date(ms);
+  const t = fmtTime(String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'));
+  const today = new Date(); const same = d.toDateString() === today.toDateString();
+  return same ? t : d.toLocaleDateString(undefined, {month:'short', day:'numeric'}) + ', ' + t;
+}
+function parseDay(s) { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); }
+function dayLabel(s) { if (!s) return 'Unscheduled'; return parseDay(s).toLocaleDateString(undefined, {weekday:'long', month:'short', day:'numeric'}); }
+function dayShort(s) { return s ? parseDay(s).toLocaleDateString(undefined, {weekday:'short', month:'short', day:'numeric'}) : ''; }
+function tripDays() {
+  const t = S.col.trip.main || {}; const out = [];
+  if (!t.start) return out;
+  const a = parseDay(t.start), b = t.end ? parseDay(t.end) : a;
+  for (let d = new Date(a); d <= b && out.length < 14; d.setDate(d.getDate() + 1)) out.push(d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'));
+  return out;
+}
+function localDay() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+function money(c) { const neg = c < 0; c = Math.abs(Math.round(c)); return (neg ? '-' : '') + '$' + Math.floor(c / 100).toLocaleString() + '.' + String(c % 100).padStart(2, '0'); }
+function kb(n) { return Math.round(n / 1024) + ' KB'; }
+
+/* ---------- Mutations, activity, undo ---------- */
+function upsert(col, rec) { rec.u = now(); rec.by = me(); if (!rec.id) rec.id = uid(); S.col[col][rec.id] = rec; return rec; }
+function remove(col, id) { const r = S.col[col][id]; if (r) { r.del = true; r.u = now(); r.by = me(); } }
+function addAct(text) { const id = uid(); S.col.act[id] = {id, at:now(), by:me(), text, u:now()}; }
+function mutate(text, fn, undoLabel) {
+  const before = clone(S);
+  fn();
+  addAct(text);
+  pruneAct(S);
+  editSeq++;
+  persist(text);
+  render();
+  if (undoLabel !== false) showUndo(undoLabel || cap(text), before);
+}
+function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) + '.' : ''; }
+function restore(before) {
+  COLS.forEach(c => {
+    if (c === 'act') return;
+    const B = before.col[c] || {}, C = S.col[c] || {};
+    new Set(Object.keys(B).concat(Object.keys(C))).forEach(id => {
+      const b = B[id], cu = C[id];
+      if (JSON.stringify(b) === JSON.stringify(cu)) return;
+      if (b) C[id] = Object.assign(clone(b), {u:now(), by:me()});
+      else if (cu) Object.assign(cu, {del:true, u:now(), by:me()});
+    });
+  });
+}
+let toastTimer = null;
+function showUndo(label, before) {
+  const el = $('#toast'); if (!el) return;
+  el.innerHTML = '<span>' + esc(label) + '</span><button type="button" id="undoBtn">Undo</button>';
+  el.classList.remove('hidden');
+  clearTimeout(toastTimer);
+  $('#undoBtn').onclick = () => {
+    el.classList.add('hidden'); clearTimeout(toastTimer);
+    restore(before); addAct('undid a change'); editSeq++; persist('undid a change'); render();
+  };
+  toastTimer = setTimeout(() => el.classList.add('hidden'), 30000);
+}
+function note(msg) {
+  const el = $('#toast'); if (!el) { alert(msg); return; }
+  el.innerHTML = '<span>' + esc(msg) + '</span><button type="button" id="okBtn">OK</button>';
+  el.classList.remove('hidden'); clearTimeout(toastTimer);
+  $('#okBtn').onclick = () => el.classList.add('hidden');
+  toastTimer = setTimeout(() => el.classList.add('hidden'), 8000);
+}
+
+/* ---------- Persistence + sync ---------- */
+function persist(msg) {
+  if (MODE === 'cloud') {
+    store.set('cache', {state:S, sha:SHA});
+    store.set('dirty', true);
+    const msgs = store.get('msgs', []); msgs.push(pname(me()) + ' ' + msg); store.set('msgs', msgs.slice(-12));
+    schedulePush();
+  } else {
+    if (!store.set('local', S)) note('This phone is out of storage. Remove a photo or two.');
+  }
+  updatePill();
+}
+let pushT = null;
+function schedulePush() { clearTimeout(pushT); pushT = setTimeout(() => sync('edit'), 700); }
+function estSize(s) { return Math.ceil(JSON.stringify(s).length * 4 / 3) + 400; }
+
+async function sync(reason) {
+  if (MODE !== 'cloud' || !CFG || !CFG.token || syncState.locked) return;
+  if (syncState.busy) { syncState.again = true; return; }
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) { syncState.offline = true; updatePill(); return; }
+  syncState.busy = true; syncState.err = ''; updatePill();
+  try {
+    for (let attempt = 0; attempt < 6; attempt++) {
+      const seq = editSeq;
+      const f = await ghRead('trip.json', CFG.token);
+      let remote = null;
+      if (f) {
+        if (f.sha === SHA && !store.get('dirty', false) && !syncState.force) { break; }
+        try { remote = upgrade(await decryptObj(JSON.parse(f.text), CFG.pass)); }
+        catch (e) { lock(); return; }
+      }
+      const dirty = store.get('dirty', false) || syncState.force;
+      const merged = remote ? merge(remote, S) : upgrade(clone(S));
+      if (!dirty || (remote && sameData(merged, remote) && !syncState.force)) {
+        S = editSeq === seq ? merged : merge(merged, S);
+        SHA = f ? f.sha : SHA;
+        if (editSeq === seq) { store.set('dirty', false); store.set('msgs', []); }
+        store.set('cache', {state:S, sha:SHA});
+        render();
+        break;
+      }
+      const env = JSON.stringify(await encryptObj(merged, CFG.pass));
+      if (env.length > LIMIT) { syncState.err = 'Trip data is over 900 KB. Remove a photo or two to sync.'; break; }
+      const msgs = store.get('msgs', []);
+      const msg = (msgs.length ? msgs.join('; ') : pname(me()) + ' updated the trip').slice(0, 240);
+      try {
+        SHA = await ghWrite('trip.json', env, f ? f.sha : null, msg, CFG.token);
+      } catch (e) {
+        if (e.status === 409 || e.status === 422) continue;
+        throw e;
+      }
+      syncState.force = false;
+      if (editSeq === seq) { S = merged; store.set('dirty', false); store.set('msgs', []); }
+      else { S = merge(merged, S); }
+      store.set('cache', {state:S, sha:SHA});
+      render();
+      if (editSeq !== seq) syncState.again = true;
+      break;
+    }
+    await uploadPending();
+    await purgeDeletedPhotos();
+    syncState.last = now(); store.set('lastsync', syncState.last); syncState.offline = false;
+  } catch (e) {
+    if (e.status === 401 || e.status === 403) syncState.err = 'GitHub refused the token. Update it in Settings.';
+    else if (e.status) syncState.err = 'GitHub error ' + e.status + '.';
+    else { syncState.offline = true; }
+  } finally {
+    syncState.busy = false; updatePill();
+    if (syncState.again) { syncState.again = false; setTimeout(() => sync('again'), 300); }
+  }
+}
+function pillText() {
+  if (MODE === 'artifact') return 'Preview with sample data';
+  if (MODE === 'local') return 'Saved on this phone only';
+  if (syncState.locked) return 'Passcode needed';
+  const dirty = store.get('dirty', false);
+  if (syncState.busy) return 'Syncing';
+  if (syncState.err) return 'Not synced';
+  if (syncState.offline) return (dirty || pendingCount) ? 'Offline, changes waiting' : 'Offline';
+  if (dirty || pendingCount) return pendingCount ? pendingCount + (pendingCount === 1 ? ' photo' : ' photos') + ' waiting to upload' : 'Changes waiting';
+  return syncState.last ? 'Synced ' + fmtStamp(syncState.last) : 'Not synced yet';
+}
+function updatePill() { const p = $('#pill'); if (p) { p.textContent = pillText(); p.classList.toggle('err', !!syncState.err || syncState.locked); } const s = $('#syncLine'); if (s) s.textContent = syncLine(); }
+function syncLine() {
+  if (MODE !== 'cloud') return pillText() + '.';
+  let t = pillText() + '.';
+  if (syncState.err) t += ' ' + syncState.err;
+  if (syncState.last) t += ' Last sync ' + fmtStamp(syncState.last) + '.';
+  return t;
+}
+function lock() { closeSheet(); syncState.locked = true; syncState.busy = false; updatePill(); renderGate('locked'); }
+
+/* ---------- Icons ---------- */
+const ICON = {
+  gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
+  trip:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M12 4 4 20"/><path d="M12 4l8 16"/><path d="M12 13l-3 7h6z"/></svg>',
+  plan:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>',
+  pack:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8a5 5 0 0 1 10 0v12H7z"/><path d="M9.5 3.5h5M7 13h10M10 16.5h4"/></svg>',
+  meals:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16v3a6 6 0 0 1-6 6h-4a6 6 0 0 1-6-6z"/><path d="M2 11h20M9 7c0-1.5 1-2 1-3.5M14 7c0-1.5 1-2 1-3.5"/></svg>',
+  money:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>',
+  photos:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3 16 5-5 4 4 3-3 6 6"/><circle cx="16.5" cy="9" r="1.4"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>'
+};
+const TABS = [['trip','Trip'],['plan','Plan'],['gear','Gear'],['meals','Meals'],['money','Expenses'],['photos','Photos']];
+
+/* ---------- Gate screens (cloud setup / join / locked; local pick) ---------- */
+let gatePick = null;
+function markSvg() { return '<svg class="mark" viewBox="0 0 72 72" aria-hidden="true"><rect width="72" height="72" rx="18" fill="#2F5D6E"/><path d="M36 15 15 55h42z" fill="#F5F8F6"/><path d="M36 37 29 55h14z" fill="#2F5D6E"/><path d="M12 56h48" stroke="#B98B4E" stroke-width="3" stroke-linecap="round"/></svg>'; }
+function peoplePicker(sel) { return '<div class="people" role="group" aria-label="Who are you">' + PORDER.map(p => '<button type="button" data-pick="' + p + '" aria-pressed="' + (sel === p) + '">' + esc(PEOPLE[p]) + '</button>').join('') + '</div>'; }
+function bindPicker(root) { root.querySelectorAll('[data-pick]').forEach(b => b.onclick = () => { gatePick = b.dataset.pick; root.querySelectorAll('[data-pick]').forEach(x => x.setAttribute('aria-pressed', String(x === b))); }); }
+
+function renderGate(kind) {
+  const app = $('#app');
+  if (kind === 'pick') {
+    app.innerHTML = '<div class="gate">' + markSvg() + '<h1>SB Camping Trip</h1><p>Pick who you are on this phone. Your name shows next to the changes you make.</p>' + peoplePicker(gatePick) + '<button class="btn pri block" id="gGo" type="button">Continue</button><p class="alert hidden" id="gErr"></p></div>';
+    bindPicker(app);
+    $('#gGo').onclick = () => { if (!gatePick) return showErr('Pick a name first.'); store.set('me', gatePick); renderApp(); };
+    return;
+  }
+  if (kind === 'locked') {
+    app.innerHTML = '<div class="gate">' + markSvg() + '<h1>Passcode changed</h1><p>The trip passcode was changed on another phone. Enter the new passcode to keep going. Changes made on this phone are kept and will sync.</p>' +
+      '<div class="field"><label for="gPass">New passcode</label><input id="gPass" type="password" autocomplete="current-password"></div>' +
+      '<button class="btn pri block" id="gGo" type="button">Unlock</button><p class="alert hidden" id="gErr"></p>' +
+      '<div class="sep"></div><button class="btn warn block" id="gOut" type="button">Sign out of this phone</button></div>';
+    $('#gGo').onclick = async () => {
+      const pass = $('#gPass').value; if (!pass) return showErr('Enter the passcode.');
+      busyBtn('#gGo', true);
+      try {
+        const f = await ghRead('trip.json', CFG.token);
+        if (f) await decryptObj(JSON.parse(f.text), pass);
+        CFG.pass = pass; store.set('cfg', CFG); syncState.locked = false; renderApp(); sync('unlock');
+      } catch (e) { busyBtn('#gGo', false); showErr(e.status ? 'Could not reach GitHub (' + e.status + ').' : 'That passcode did not work.'); }
+    };
+    $('#gOut').onclick = signOut;
+    return;
+  }
+  // cloud welcome: join or set up
+  const mode = kind === 'setup' ? 'setup' : 'join';
+  app.innerHTML = '<div class="gate">' + markSvg() + '<h1>SB Camping Trip</h1>' +
+    '<div class="seg" role="group"><button type="button" id="gJoin" aria-pressed="' + (mode === 'join') + '">Join this trip</button><button type="button" id="gSetup" aria-pressed="' + (mode === 'setup') + '">First-time setup</button></div>' +
+    (mode === 'join'
+      ? '<p>Enter the trip passcode and pick your name.</p><div class="field"><label for="gPass">Trip passcode</label><input id="gPass" type="password" autocomplete="current-password"></div>' + '<span class="lbl">Who are you</span>' + peoplePicker(gatePick) +
+        '<button class="btn pri block" id="gGo" type="button">Join</button>'
+      : '<p>For the repo owner, once. This creates the encrypted trip file and the encrypted access file in the repo.</p>' +
+        '<div class="field"><label for="gTok">GitHub fine-grained token</label><input id="gTok" type="password" autocomplete="off" placeholder="github_pat_..."></div>' +
+        '<p class="note">Limit it to this repo only, with Contents: read and write.</p>' +
+        '<div class="field"><label for="gPass">New trip passcode</label><input id="gPass" type="password" autocomplete="new-password"></div>' +
+        '<div class="field"><label for="gPass2">Type it again</label><input id="gPass2" type="password" autocomplete="new-password"></div>' +
+        '<p class="note">At least 12 characters. Four random words works well. There is no recovery: if the passcode is lost, the trip data cannot be opened.</p>' +
+        '<span class="lbl">Who are you</span>' + peoplePicker(gatePick || 'grant') +
+        '<button class="btn pri block" id="gGo" type="button">Set up trip</button>') +
+    '<p class="alert hidden" id="gErr"></p></div>';
+  if (mode === 'setup' && !gatePick) gatePick = 'grant';
+  bindPicker(app);
+  $('#gJoin').onclick = () => renderGate('join');
+  $('#gSetup').onclick = () => renderGate('setup');
+  $('#gGo').onclick = mode === 'join' ? doJoin : doSetup;
+}
+function showErr(m) { const e = $('#gErr'); if (e) { e.textContent = m; e.classList.remove('hidden'); } busyBtn('#gGo', false); }
+function busyBtn(sel, on) { const b = $(sel); if (!b) return; if (on) { b.dataset.t = b.textContent; b.textContent = 'Working'; b.disabled = true; } else { if (b.dataset.t) b.textContent = b.dataset.t; b.disabled = false; } }
+
+async function doJoin() {
+  const pass = $('#gPass').value;
+  if (!pass) return showErr('Enter the trip passcode.');
+  if (!gatePick) return showErr('Pick your name.');
+  busyBtn('#gGo', true);
+  try {
+    const a = await ghRead('access.json', null);
+    if (!a) return showErr('This trip has not been set up yet. The owner needs to run first-time setup.');
+    let acc; try { acc = await decryptObj(JSON.parse(a.text), pass); } catch (e) { return showErr('That passcode did not work.'); }
+    const f = await ghRead('trip.json', acc.token);
+    if (!f) return showErr('The trip file is missing from the repo.');
+    const st = upgrade(await decryptObj(JSON.parse(f.text), pass));
+    CFG = {me:gatePick, pass, token:acc.token}; store.set('cfg', CFG);
+    S = st; SHA = f.sha; store.set('cache', {state:S, sha:SHA}); store.set('dirty', false);
+    syncState.last = now(); store.set('lastsync', syncState.last);
+    startCloud();
+  } catch (e) { showErr(e.status === 403 ? 'GitHub is rate-limiting this network. Wait a few minutes and try again.' : e.status ? 'GitHub error ' + e.status + '.' : 'No connection. Try again with signal.'); }
+}
+async function doSetup() {
+  const tok = $('#gTok').value.trim(), pass = $('#gPass').value, pass2 = $('#gPass2').value;
+  if (!tok) return showErr('Paste the GitHub token.');
+  if (pass.length < 12) return showErr('Use at least 12 characters for the passcode.');
+  if (pass !== pass2) return showErr('The two passcodes do not match.');
+  if (!gatePick) return showErr('Pick your name.');
+  busyBtn('#gGo', true);
+  try {
+    const a = await ghRead('access.json', tok);
+    if (a) return showErr('This trip is already set up. Use Join instead.');
+    const f = await ghRead('trip.json', tok);
+    let st;
+    if (f) { try { st = upgrade(await decryptObj(JSON.parse(f.text), pass)); } catch (e) { return showErr('A trip file already exists and this passcode does not open it.'); } }
+    else st = SEED ? upgrade(clone(SEED)) : emptyState();
+    CFG = {me:gatePick, pass, token:tok};
+    const tripEnv = JSON.stringify(await encryptObj(st, pass));
+    const newSha = await ghWrite('trip.json', tripEnv, f ? f.sha : null, pname(gatePick) + ' set up the trip', tok);
+    await ghWrite('access.json', JSON.stringify(await encryptObj({token:tok, by:gatePick, at:now()}, pass)), null, pname(gatePick) + ' set up sharing', tok);
+    store.set('cfg', CFG); S = st; SHA = newSha; store.set('cache', {state:S, sha:SHA}); store.set('dirty', false);
+    syncState.last = now(); store.set('lastsync', syncState.last);
+    startCloud();
+  } catch (e) { showErr(e.status === 401 || e.status === 403 ? 'GitHub refused the token. Check that it has Contents: read and write on this repo.' : e.status === 404 ? 'GitHub could not find this repo with that token.' : e.status ? 'GitHub error ' + e.status + '.' : 'No connection. Try again with signal.'); }
+}
+let pollT = null;
+function startCloud() {
+  renderApp();
+  clearInterval(pollT);
+  pollT = setInterval(() => sync('poll'), 20000);
+  sync('start');
+}
+async function signOut() {
+  await refreshPending();
+  const dirty = MODE === 'cloud' && (store.get('dirty', false) || pendingCount > 0);
+  if (dirty && !confirm('Some changes or photos on this phone have not synced yet. Sign out anyway and lose them?')) return;
+  if (!dirty && !confirm('Sign out of SB Camping Trip on this phone?')) return;
+  clearInterval(pollT);
+  store.clearMine();
+  await IDB.wipe();
+  try { if (window.caches) { const ks = await caches.keys(); await Promise.all(ks.filter(k => k.indexOf('sbct-') === 0).map(k => caches.delete(k))); } } catch (e) {}
+  location.reload();
+}
+
+/* ---------- Main render ---------- */
+function renderApp() {
+  if (MODE !== 'cloud' && !me()) return renderGate('pick');
+  const app = $('#app');
+  app.innerHTML =
+    '<header class="top"><h1 id="tripName"></h1><span class="pill" id="pill" role="status"></span>' +
+    '<button class="iconbtn" type="button" id="settingsBtn" aria-label="Settings">' + ICON.gear + '</button></header>' +
+    '<main id="main"></main>' +
+    '<nav class="tabbar" aria-label="Sections">' + TABS.map(t => '<button type="button" data-tab="' + t[0] + '">' + ICON[t[0] === 'gear' ? 'pack' : t[0]] + '<span>' + t[1] + '</span></button>').join('') + '</nav>' +
+    '<div class="toast hidden" id="toast" role="status" aria-live="polite"></div>' +
+    '<input type="file" id="photoIn" accept="image/*" multiple class="hidden">';
+  app.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { TAB = b.dataset.tab; store.set('tab', TAB); render(); window.scrollTo(0, 0); });
+  $('#settingsBtn').onclick = openSettings;
+  $('#photoIn').onchange = onPhoto;
+  render();
+}
+function render() {
+  if (!$('#main') || !S) return;
+  const t = S.col.trip.main || {};
+  $('#tripName').textContent = t.name || 'SB Camping Trip';
+  document.title = t.name || 'SB Camping Trip';
+  document.querySelectorAll('[data-tab]').forEach(b => { if (b.dataset.tab === TAB) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
+  const banner = MODE === 'artifact' ? '<div class="banner">Preview with sample data. Changes here are not shared with the crew.</div>'
+    : MODE === 'local' ? '<div class="banner">Running outside GitHub Pages, so changes stay on this phone.</div>' : '';
+  const views = {trip:viewTrip, plan:viewPlan, gear:viewGear, meals:viewMeals, money:viewMoney, photos:viewPhotos};
+  $('#main').innerHTML = banner + (views[TAB] || viewTrip)();
+  updatePill();
+}
+
+/* Trip */
+function viewTrip() {
+  const t = S.col.trip.main || {};
+  const dates = t.start ? dayShort(t.start) + (t.end && t.end !== t.start ? ' to ' + dayShort(t.end) : '') : 'Dates not set';
+  const kv = [];
+  if (t.campsite) kv.push(['Campsite', esc(t.campsite) + (t.site ? ', site ' + esc(t.site) : '')]);
+  if (t.address) kv.push(['Address', esc(t.address)]);
+  if (t.map) kv.push(['Map', '<a href="' + esc(t.map) + '" target="_blank" rel="noopener">Open in maps</a>']);
+  if (t.resv) kv.push(['Reservation', esc(t.resv)]);
+  if (t.checkin) kv.push(['Check-in', esc(t.checkin)]);
+  if (t.checkout) kv.push(['Check-out', esc(t.checkout)]);
+  if (t.vehicles) kv.push(['Vehicles', esc(t.vehicles)]);
+  if (t.ranger) kv.push(['Ranger', esc(t.ranger) + (t.rangerPhone ? ', <a href="tel:' + esc(t.rangerPhone.replace(/[^\d+]/g, '')) + '">' + esc(t.rangerPhone) + '</a>' : '')]);
+  if (t.permit) kv.push(['Fire permit', esc(t.permit)]);
+  const heads = live('heads').sort((a, b) => (a.order || 0) - (b.order || 0) || (a.title || '').localeCompare(b.title || ''));
+  const acts = live('act').sort((a, b) => b.at - a.at).slice(0, 12);
+  return '<section class="card"><div class="card-h"><div><h2>' + esc(t.name || 'Trip') + '</h2><div class="sub">' + esc(dates) + '</div></div><button class="btn small" type="button" data-a="editTrip">Edit</button></div>' +
+    '<div class="card-b"><dl class="kv">' + kv.map(r => '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>').join('') + '</dl></div></section>' +
+    '<section class="card"><div class="card-h"><h2>Crew</h2></div><div class="card-b">' +
+      ['car1','car2'].map(c => '<div style="margin:4px 0"><strong>' + esc(S.cars[c].label) + ':</strong> ' + esc(carWho(c)) + '</div>').join('') +
+      '</div></section>' +
+    '<div class="sect">Heads-ups</div><section class="card">' +
+      (heads.length ? heads.map(h => '<div class="row"><div class="main" data-a="editHead" data-id="' + h.id + '"><div class="t">' + esc(h.title) + '</div><div class="n">' + linkify(h.text) + '</div></div></div>').join('') : '<div class="row"><div class="n">Nothing yet.</div></div>') +
+      '<div class="addrow"><button class="linkbtn" type="button" data-a="addHead">Add heads-up</button></div></section>' +
+    '<div class="sect">Recent changes</div><section class="card log">' +
+      (acts.length ? acts.map(a => '<div class="row"><div class="main"><div>' + esc(pname(a.by)) + ' ' + esc(a.text) + '</div><div class="n">' + esc(fmtStamp(a.at)) + '</div></div></div>').join('') : '<div class="row"><div class="n">No changes yet.</div></div>') +
+    '</section>';
+}
+function linkify(s) { return esc(s).replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">link</a>'); }
+
+/* Plan */
+function viewPlan() {
+  const items = live('itin');
+  const days = tripDays(); const extra = [...new Set(items.map(i => i.day || ''))].filter(d => days.indexOf(d) < 0);
+  const all = days.concat(extra.sort());
+  if (!all.length) all.push('');
+  return all.map(d => {
+    const list = items.filter(i => (i.day || '') === d).sort((a, b) => (a.start || '99') .localeCompare(b.start || '99') || (a.title || '').localeCompare(b.title || ''));
+    return '<div class="sect">' + esc(dayLabel(d)) + '</div><section class="card">' +
+      (list.length ? list.map(i => '<div class="row"><div class="time">' + esc(i.start ? fmtTime(i.start) + (i.end ? '<br>to ' + fmtTime(i.end) : '') : 'Later').replace(/&lt;br&gt;/g, '<br>') + '</div>' +
+        '<div class="main" data-a="editItin" data-id="' + i.id + '"><div class="t">' + esc(i.title) + '</div>' + (i.notes ? '<div class="n">' + esc(i.notes) + '</div>' : '') +
+        ((i.link || i.opt) ? '<div class="chips">' + (i.opt ? '<span class="chip opt">Optional</span>' : '') + (i.link ? '<a class="chip" href="' + esc(i.link) + '" target="_blank" rel="noopener">Open link</a>' : '') + '</div>' : '') + '</div></div>').join('')
+        : '<div class="row"><div class="n">Nothing planned.</div></div>') +
+      '<div class="addrow"><button class="linkbtn" type="button" data-a="addItin" data-day="' + esc(d) + '">Add to ' + esc(d ? dayShort(d).split(',')[0] : 'plan') + '</button></div></section>';
+  }).join('');
+}
+
+/* Gear */
+function gearRow(g, showOwner) {
+  const chips = [];
+  if (g.owner === 'shared') chips.push(g.bring ? '<span class="chip">' + esc(whoLabel(g.bring)) + '</span>' : '<span class="chip open">Unclaimed</span>');
+  if (g.car) chips.push('<span class="chip">Rides in ' + esc(S.cars[g.car] ? S.cars[g.car].label : g.car) + '</span>');
+  if (showOwner && g.owner !== 'shared') chips.push('<span class="chip">' + esc(pname(g.owner)) + '</span>');
+  return '<div class="row' + (g.packed ? ' done' : '') + '"><button type="button" class="chk" role="checkbox" aria-checked="' + !!g.packed + '" aria-label="Packed: ' + esc(g.name) + '" data-a="pack" data-id="' + g.id + '">' + ICON.check + '</button>' +
+    '<div class="main" data-a="editGear" data-id="' + g.id + '"><div class="t">' + esc(g.name) + '</div>' + (g.note ? '<div class="n">' + esc(g.note) + '</div>' : '') + (chips.length ? '<div class="chips">' + chips.join('') + '</div>' : '') + '</div></div>';
+}
+function gearGroups(list, cats) {
+  const order = cats.concat([...new Set(list.map(g => g.cat || 'Other'))].filter(c => cats.indexOf(c) < 0));
+  return order.map(c => { const l = list.filter(g => (g.cat || 'Other') === c).sort((a, b) => (a.order || 0) - (b.order || 0) || a.name.localeCompare(b.name)); if (!l.length) return ''; const p = l.filter(g => g.packed).length;
+    return '<div class="sect">' + esc(c) + '<small>' + p + ' of ' + l.length + ' packed</small></div><section class="card">' + l.map(g => gearRow(g)).join('') + '</section>'; }).join('');
+}
+function viewGear() {
+  const all = live('gear');
+  const seg = '<div class="seg" role="group" aria-label="Gear view">' + [['shared','Shared'],['mine','Mine'],['crew','Crew']].map(v => '<button type="button" data-a="gearView" data-v="' + v[0] + '" aria-pressed="' + (GEARVIEW === v[0]) + '">' + v[1] + '</button>').join('') + '</div>';
+  if (GEARVIEW === 'mine') {
+    const l = all.filter(g => g.owner === me()); const p = l.filter(g => g.packed).length;
+    return seg + '<section class="card"><div class="card-b" style="padding-top:14px"><strong>' + esc(pname(me())) + "'s list</strong><div class=\"bar\"><i style=\"width:" + (l.length ? Math.round(p / l.length * 100) : 0) + '%"></i></div><div class="sub">' + p + ' of ' + l.length + ' packed</div></div><div class="addrow"><button class="linkbtn" type="button" data-a="addGear" data-owner="' + me() + '">Add item</button></div></section>' + gearGroups(l, PERSONAL_CATS);
+  }
+  if (GEARVIEW === 'crew') {
+    return seg + PORDER.map(p => { const l = all.filter(g => g.owner === p); const k = l.filter(g => g.packed).length; const left = l.filter(g => !g.packed);
+      return '<section class="card"><div class="card-b" style="padding-top:14px"><strong>' + esc(pname(p)) + '</strong><div class="bar"><i style="width:' + (l.length ? Math.round(k / l.length * 100) : 0) + '%"></i></div><div class="sub">' + k + ' of ' + l.length + ' packed' + (left.length && left.length <= 6 ? '. Still to pack: ' + esc(left.map(g => g.name).join(', ')) : '') + '</div></div></section>'; }).join('') +
+      (function () { const un = all.filter(g => g.owner === 'shared' && !g.bring); return '<div class="sect">Shared gear nobody has claimed<small>' + un.length + '</small></div><section class="card">' + (un.length ? un.map(g => gearRow(g)).join('') : '<div class="row"><div class="n">Everything is claimed.</div></div>') + '</section>'; })();
+  }
+  const l = all.filter(g => g.owner === 'shared'); const p = l.filter(g => g.packed).length; const un = l.filter(g => !g.bring).length;
+  return seg + '<section class="card"><div class="card-b" style="padding-top:14px"><strong>Shared gear</strong><div class="bar"><i style="width:' + (l.length ? Math.round(p / l.length * 100) : 0) + '%"></i></div><div class="sub">' + p + ' of ' + l.length + ' packed. ' + un + ' unclaimed.</div></div><div class="addrow"><button class="linkbtn" type="button" data-a="addGear" data-owner="shared">Add shared item</button></div></section>' + gearGroups(l, SHARED_CATS);
+}
+
+/* Meals */
+function viewMeals() {
+  const meals = live('meals'); const days = tripDays(); const extra = [...new Set(meals.map(m => m.day || ''))].filter(d => days.indexOf(d) < 0);
+  const all = days.concat(extra.sort());
+  const groc = live('groc').sort((a, b) => (a.bought - b.bought) || (a.name || '').localeCompare(b.name || ''));
+  const gb = groc.filter(g => g.bought).length;
+  return all.map(d => {
+    const l = meals.filter(m => (m.day || '') === d).sort((a, b) => MEALS.indexOf(a.meal) - MEALS.indexOf(b.meal));
+    return '<div class="sect">' + esc(dayLabel(d)) + '</div><section class="card">' + (l.length ? l.map(m => '<div class="row"><div class="time">' + esc(m.meal) + '</div><div class="main" data-a="editMeal" data-id="' + m.id + '"><div class="t">' + esc(m.title || 'Not planned yet') + '</div>' + (m.notes ? '<div class="n">' + esc(m.notes) + '</div>' : '') + '<div class="chips">' + (m.cook === 'out' ? '<span class="chip">From a restaurant</span>' : m.cook ? '<span class="chip">Cook: ' + esc(whoLabel(m.cook)) + '</span>' : '<span class="chip open">No cook yet</span>') + '</div></div></div>').join('') : '<div class="row"><div class="n">No meals planned.</div></div>') +
+      '<div class="addrow"><button class="linkbtn" type="button" data-a="addMeal" data-day="' + esc(d) + '">Add meal</button></div></section>';
+  }).join('') +
+  '<div class="sect">Grocery list<small>' + gb + ' of ' + groc.length + ' bought</small></div><section class="card">' +
+    (groc.length ? groc.map(g => '<div class="row' + (g.bought ? ' done' : '') + '"><button type="button" class="chk" role="checkbox" aria-checked="' + !!g.bought + '" aria-label="Bought: ' + esc(g.name) + '" data-a="buy" data-id="' + g.id + '">' + ICON.check + '</button><div class="main" data-a="editGroc" data-id="' + g.id + '"><div class="t">' + esc(g.name) + (g.qty ? ' <span class="sub">' + esc(g.qty) + '</span>' : '') + '</div>' + (g.buyer ? '<div class="chips"><span class="chip">' + esc(whoLabel(g.buyer)) + '</span></div>' : '') + '</div></div>').join('') : '<div class="row"><div class="n">Nothing on the list.</div></div>') +
+    '<div class="addrow"><button class="linkbtn" type="button" data-a="addGroc">Add grocery item</button></div></section>';
+}
+
+/* Money */
+function balances() {
+  const net = {}; PORDER.forEach(p => net[p] = 0);
+  live('exp').forEach(e => {
+    const split = (e.split && e.split.length ? e.split : PORDER).filter(p => p in net);
+    if (!split.length || !(e.paid in net)) return;
+    const c = Math.round(e.cents || 0), base = Math.floor(c / split.length); let rem = c - base * split.length;
+    net[e.paid] += c;
+    split.forEach(p => { net[p] -= base + (rem > 0 ? 1 : 0); if (rem > 0) rem--; });
+  });
+  const cred = PORDER.filter(p => net[p] > 0).map(p => [p, net[p]]).sort((a, b) => b[1] - a[1]);
+  const debt = PORDER.filter(p => net[p] < 0).map(p => [p, -net[p]]).sort((a, b) => b[1] - a[1]);
+  const pays = []; let i = 0, j = 0;
+  while (i < debt.length && j < cred.length) { const x = Math.min(debt[i][1], cred[j][1]); if (x > 0) pays.push([debt[i][0], cred[j][0], x]); debt[i][1] -= x; cred[j][1] -= x; if (debt[i][1] === 0) i++; if (cred[j][1] === 0) j++; }
+  return {net, pays};
+}
+function viewMoney() {
+  const ex = live('exp').sort((a, b) => (b.date || '').localeCompare(a.date || '') || b.u - a.u);
+  const total = ex.reduce((s, e) => s + (e.cents || 0), 0);
+  const {net, pays} = balances();
+  return '<section class="card"><div class="card-h"><h2>Who owes whom</h2><span class="sub">Total ' + money(total) + '</span></div><div class="card-b" style="padding:0">' +
+    (pays.length ? pays.map(p => '<div class="bal"><span>' + esc(pname(p[0])) + ' pays ' + esc(pname(p[1])) + '</span><strong>' + money(p[2]) + '</strong></div>').join('') : '<div class="bal"><span class="sub">Everyone is square.</span></div>') +
+    '</div></section><section class="card"><div class="card-h"><h2>Balances</h2></div><div class="card-b" style="padding:0">' +
+    PORDER.map(p => '<div class="bal"><span>' + esc(pname(p)) + '</span><span class="' + (net[p] > 0 ? 'pos' : net[p] < 0 ? 'neg' : '') + '">' + (net[p] > 0 ? 'is owed ' + money(net[p]) : net[p] < 0 ? 'owes ' + money(-net[p]) : 'square') + '</span></div>').join('') +
+    '</div></section><div class="sect">All expenses</div><section class="card">' +
+    (ex.length ? ex.map(e => '<div class="row"><div class="main" data-a="editExp" data-id="' + e.id + '"><div class="t">' + esc(e.desc) + '</div><div class="n">' + esc(pname(e.paid)) + ' paid' + (e.date ? ', ' + esc(dayShort(e.date)) : '') + '. Split ' + ((e.split || []).length === 4 ? 'four ways' : 'with ' + esc((e.split || []).map(pname).join(', '))) + '</div></div><strong>' + money(e.cents) + '</strong></div>').join('') : '<div class="row"><div class="n">No expenses yet.</div></div>') +
+    '<div class="addrow"><button class="linkbtn" type="button" data-a="addExp">Add expense</button></div></section>';
+}
+
+/* Photos + notes */
+function viewPhotos() {
+  const ph = live('photos').sort((a, b) => b.at - a.at);
+  const notes = live('notes').sort((a, b) => b.at - a.at);
+  return '<section class="card"><div class="card-h"><h2>Photos</h2><button class="btn small pri" type="button" data-a="addPhoto">Add photos</button></div>' +
+    (ph.length ? '<div class="photos">' + ph.map(p => { const src = p.img || THUMB[p.id] || FULL[p.id]; if (!src) setTimeout(() => ensureThumb(p.id), 0);
+      return '<button type="button" class="photo" data-a="viewPhoto" data-id="' + p.id + '"><div class="ph" data-ph="' + p.id + '">' + (src ? '<img src="' + src + '" alt="' + esc(p.cap || 'Trip photo') + '" loading="lazy">' : '<div class="phwait">' + (photoState[p.id] === 'missing' ? 'Waiting for ' + esc(pname(p.by)) + "'s phone to upload" : 'Loading photo') + '</div>') + '</div><span>' + esc(p.cap || pname(p.by)) + '</span></button>'; }).join('') + '</div>' : '<div class="card-b"><div class="n sub">No photos yet.</div></div>') +
+    '<div class="card-b"><div class="sub">' + ph.length + (ph.length === 1 ? ' photo' : ' photos') + '. Tap a photo to open it at full size.</div></div></section>' +
+    '<div class="sect">Notes</div><section class="card">' +
+    (notes.length ? notes.map(n => '<div class="row"><div class="main" data-a="editNote" data-id="' + n.id + '"><div class="t" style="font-weight:400;white-space:pre-wrap">' + linkify(n.text) + '</div><div class="n">' + esc(pname(n.by)) + ', ' + esc(fmtStamp(n.at)) + '</div></div></div>').join('') : '<div class="row"><div class="n">No notes yet.</div></div>') +
+    '<div class="addrow"><button class="linkbtn" type="button" data-a="addNote">Add note</button></div></section>';
+}
+
+/* ---------- Sheet + forms ---------- */
+function openSheet(html, focus) {
+  closeSheet();
+  const scrim = document.createElement('div'); scrim.className = 'scrim'; scrim.id = 'scrim'; scrim.onclick = closeSheet;
+  const sh = document.createElement('div'); sh.className = 'sheet'; sh.id = 'sheet'; sh.setAttribute('role', 'dialog'); sh.setAttribute('aria-modal', 'true');
+  sh.innerHTML = '<div class="grab"></div>' + html;
+  document.body.append(scrim, sh);
+  const f = sh.querySelector('input,select,textarea'); if (focus && f && f.type !== 'checkbox' && f.type !== 'file') { try { f.focus({preventScroll:true}); } catch (e) {} }
+  return sh;
+}
+function closeSheet() { const a = $('#scrim'), b = $('#sheet'); if (a) a.remove(); if (b) b.remove(); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+
+function fieldHtml(f, v) {
+  const id = 'f_' + f.k;
+  const lab = '<label for="' + id + '">' + esc(f.label) + '</label>';
+  if (f.type === 'textarea') return '<div class="field">' + lab + '<textarea id="' + id + '">' + esc(v) + '</textarea></div>';
+  if (f.type === 'select') return '<div class="field">' + lab + '<select id="' + id + '">' + f.options.map(o => { const val = Array.isArray(o) ? o[0] : o, txt = Array.isArray(o) ? o[1] : o; return '<option value="' + esc(val) + '"' + (String(v == null ? '' : v) === String(val) ? ' selected' : '') + '>' + esc(txt) + '</option>'; }).join('') + '</select></div>';
+  if (f.type === 'multi') return '<div class="field"><span class="lbl">' + esc(f.label) + '</span><div class="opts" id="' + id + '">' + f.options.map(o => '<label><input type="checkbox" value="' + esc(o[0]) + '"' + ((v || []).indexOf(o[0]) >= 0 ? ' checked' : '') + '>' + esc(o[1]) + '</label>').join('') + '</div></div>';
+  if (f.type === 'check') return '<div class="field"><div class="opts"><label><input type="checkbox" id="' + id + '"' + (v ? ' checked' : '') + '>' + esc(f.label) + '</label></div></div>';
+  if (f.type === 'money') return '<div class="field">' + lab + '<input id="' + id + '" type="text" inputmode="decimal" value="' + (v ? (v / 100).toFixed(2) : '') + '" placeholder="0.00"></div>';
+  return '<div class="field">' + lab + '<input id="' + id + '" type="' + (f.type || 'text') + '" value="' + esc(v) + '"' + (f.ph ? ' placeholder="' + esc(f.ph) + '"' : '') + '></div>';
+}
+function readField(f) {
+  const el = $('#f_' + f.k);
+  if (f.type === 'multi') return [...el.querySelectorAll('input:checked')].map(i => i.value);
+  if (f.type === 'check') return el.checked;
+  if (f.type === 'money') { const n = parseFloat(String(el.value).replace(/[^\d.]/g, '')); return isFinite(n) ? Math.round(n * 100) : 0; }
+  return el.value.trim();
+}
+function form(o) {
+  const v = o.values || {};
+  const sh = openSheet('<h2>' + esc(o.title) + '</h2>' + o.fields.map(f => fieldHtml(f, v[f.k])).join('') + (o.extra || '') +
+    '<p class="alert hidden" id="fErr"></p><div class="actions">' + (o.onDelete ? '<button class="btn warn" type="button" id="fDel">Delete</button>' : '') +
+    '<button class="btn" type="button" id="fCancel">Cancel</button><button class="btn pri" type="button" id="fSave">Save</button></div>', !o.onDelete && !o.noFocus);
+  $('#fCancel').onclick = closeSheet;
+  $('#fSave').onclick = () => { const vals = {}; o.fields.forEach(f => vals[f.k] = readField(f)); const err = o.validate && o.validate(vals); if (err) { const e = $('#fErr'); e.textContent = err; e.classList.remove('hidden'); return; } closeSheet(); o.onSave(vals); };
+  if (o.onDelete) $('#fDel').onclick = () => { closeSheet(); o.onDelete(); };
+  return sh;
+}
+const need = k => v => v[k] ? '' : 'Fill in the ' + k + ' field.';
+const dayOpts = () => [['', 'No day']].concat(tripDays().map(d => [d, dayShort(d)]));
+
+/* ---------- Actions ---------- */
+const A = {};
+A.editTrip = () => {
+  const t = S.col.trip.main;
+  form({title:'Trip details', noFocus:true, values:t, fields:[
+    {k:'name', label:'Trip name'}, {k:'start', label:'First day', type:'date'}, {k:'end', label:'Last day', type:'date'},
+    {k:'campsite', label:'Campground'}, {k:'site', label:'Site number'}, {k:'address', label:'Address'}, {k:'map', label:'Map link', type:'url'},
+    {k:'resv', label:'Reservation'}, {k:'checkin', label:'Check-in'}, {k:'checkout', label:'Check-out'}, {k:'vehicles', label:'Vehicles'},
+    {k:'ranger', label:'Ranger district'}, {k:'rangerPhone', label:'Ranger phone', type:'tel'}, {k:'permit', label:'Fire permit'}],
+    validate:v => (v.start && v.end && v.end < v.start) ? 'The last day is before the first day.' : '',
+    onSave:v => mutate('edited the trip details', () => upsert('trip', Object.assign(clone(t), v)))});
+};
+A.addHead = () => form({title:'Add heads-up', fields:[{k:'title', label:'Title'}, {k:'text', label:'Details', type:'textarea'}], validate:need('title'),
+  onSave:v => mutate('added heads-up "' + v.title + '"', () => upsert('heads', Object.assign({order:now()}, v)), false)});
+A.editHead = el => { const h = S.col.heads[el.dataset.id]; form({title:'Edit heads-up', values:h, fields:[{k:'title', label:'Title'}, {k:'text', label:'Details', type:'textarea'}], validate:need('title'),
+  onSave:v => mutate('edited heads-up "' + v.title + '"', () => upsert('heads', Object.assign(clone(h), v))),
+  onDelete:() => mutate('deleted heads-up "' + h.title + '"', () => remove('heads', h.id))}); };
+
+const itinFields = () => [{k:'title', label:'What'}, {k:'day', label:'Day', type:'select', options:dayOpts()}, {k:'start', label:'Start time', type:'time'}, {k:'end', label:'End time', type:'time'}, {k:'notes', label:'Notes', type:'textarea'}, {k:'link', label:'Link', type:'url', ph:'https://'}, {k:'opt', label:'Optional', type:'check'}];
+A.addItin = el => form({title:'Add to plan', values:{day:el.dataset.day}, fields:itinFields(), validate:need('title'),
+  onSave:v => mutate('added "' + v.title + '" to the plan', () => upsert('itin', v), false)});
+A.editItin = el => { const i = S.col.itin[el.dataset.id]; form({title:'Edit plan item', values:i, fields:itinFields(), validate:need('title'),
+  onSave:v => mutate('edited "' + v.title + '" in the plan', () => upsert('itin', Object.assign(clone(i), v))),
+  onDelete:() => mutate('removed "' + i.title + '" from the plan', () => remove('itin', i.id))}); };
+
+A.gearView = el => { GEARVIEW = el.dataset.v; store.set('gearview', GEARVIEW); render(); };
+const gearFields = shared => [{k:'name', label:'Item'}, {k:'cat', label:'Category', type:'select', options:shared ? SHARED_CATS : PERSONAL_CATS}]
+  .concat(shared ? [{k:'bring', label:"Who's bringing", type:'select', options:whoOptions('Unclaimed')}] : [])
+  .concat([{k:'car', label:'Rides in', type:'select', options:[['', 'Not decided'], ['car1', 'Car 1 (' + carWho('car1') + ')'], ['car2', 'Car 2 (' + carWho('car2') + ')']]}, {k:'note', label:'Note', type:'textarea'}, {k:'packed', label:'Packed', type:'check'}]);
+A.addGear = el => { const owner = el.dataset.owner; const shared = owner === 'shared';
+  form({title:shared ? 'Add shared item' : 'Add to your list', values:{cat:shared ? 'Camp' : 'Camp'}, fields:gearFields(shared), validate:need('name'),
+    onSave:v => mutate('added ' + v.name + (shared ? ' to shared gear' : ' to their list'), () => upsert('gear', Object.assign({owner, order:now()}, v)), false)}); };
+A.editGear = el => { const g = S.col.gear[el.dataset.id]; const shared = g.owner === 'shared';
+  form({title:shared ? 'Shared item' : pname(g.owner) + "'s item", values:g, fields:gearFields(shared), validate:need('name'),
+    onSave:v => { let txt = 'edited ' + v.name; if (shared && v.bring !== g.bring) txt = v.bring ? 'set ' + v.name + ' to ' + whoLabel(v.bring) : 'unclaimed ' + v.name; mutate(txt, () => upsert('gear', Object.assign(clone(g), v))); },
+    onDelete:() => mutate('deleted ' + g.name, () => remove('gear', g.id))}); };
+A.pack = el => { const g = S.col.gear[el.dataset.id]; const v = !g.packed; mutate((v ? 'packed ' : 'unpacked ') + g.name, () => upsert('gear', Object.assign(clone(g), {packed:v}))); };
+
+const mealFields = () => [{k:'day', label:'Day', type:'select', options:dayOpts()}, {k:'meal', label:'Meal', type:'select', options:MEALS}, {k:'title', label:'What we are eating'}, {k:'cook', label:'Who is cooking', type:'select', options:whoOptions('Nobody yet').concat([['out', 'Restaurant, no cook needed']])}, {k:'notes', label:'Notes', type:'textarea'}];
+A.addMeal = el => form({title:'Add meal', values:{day:el.dataset.day, meal:'Dinner'}, fields:mealFields(),
+  onSave:v => mutate('added ' + v.meal.toLowerCase() + ' on ' + (dayShort(v.day) || 'the trip'), () => upsert('meals', v), false)});
+A.editMeal = el => { const m = S.col.meals[el.dataset.id]; form({title:'Edit meal', values:m, fields:mealFields(),
+  onSave:v => mutate('edited ' + v.meal.toLowerCase() + ' on ' + (dayShort(v.day) || 'the trip'), () => upsert('meals', Object.assign(clone(m), v))),
+  onDelete:() => mutate('deleted ' + m.meal.toLowerCase() + ' on ' + (dayShort(m.day) || 'the trip'), () => remove('meals', m.id))}); };
+const grocFields = () => [{k:'name', label:'Item'}, {k:'qty', label:'Amount', ph:'2 bags'}, {k:'buyer', label:'Who is buying', type:'select', options:whoOptions('Anyone')}, {k:'bought', label:'Bought', type:'check'}];
+A.addGroc = () => form({title:'Add grocery item', fields:grocFields(), validate:need('name'), onSave:v => mutate('added ' + v.name + ' to groceries', () => upsert('groc', v), false)});
+A.editGroc = el => { const g = S.col.groc[el.dataset.id]; form({title:'Grocery item', values:g, fields:grocFields(), validate:need('name'),
+  onSave:v => mutate('edited ' + v.name + ' in groceries', () => upsert('groc', Object.assign(clone(g), v))),
+  onDelete:() => mutate('removed ' + g.name + ' from groceries', () => remove('groc', g.id))}); };
+A.buy = el => { const g = S.col.groc[el.dataset.id]; const v = !g.bought; mutate((v ? 'bought ' : 'unmarked ') + g.name, () => upsert('groc', Object.assign(clone(g), {bought:v}))); };
+
+const expFields = () => [{k:'desc', label:'What for'}, {k:'cents', label:'Amount ($)', type:'money'}, {k:'paid', label:'Paid by', type:'select', options:PORDER.map(p => [p, pname(p)])}, {k:'split', label:'Split among', type:'multi', options:PORDER.map(p => [p, pname(p)])}, {k:'date', label:'Date', type:'date'}, {k:'note', label:'Note', type:'textarea'}];
+const expValid = v => !v.desc ? 'Say what the expense was for.' : !(v.cents > 0) ? 'Enter an amount.' : !v.split.length ? 'Pick at least one person to split with.' : '';
+A.addExp = () => form({title:'Add expense', values:{paid:me(), split:PORDER.slice(), date:localDay()}, fields:expFields(), validate:expValid,
+  onSave:v => mutate('added ' + money(v.cents) + ' for ' + v.desc, () => upsert('exp', v), false)});
+A.editExp = el => { const e = S.col.exp[el.dataset.id]; form({title:'Edit expense', values:e, fields:expFields(), validate:expValid,
+  onSave:v => mutate('edited the ' + v.desc + ' expense', () => upsert('exp', Object.assign(clone(e), v))),
+  onDelete:() => mutate('deleted the ' + e.desc + ' expense', () => remove('exp', e.id))}); };
+
+A.addNote = () => form({title:'Add note', fields:[{k:'text', label:'Note', type:'textarea'}], validate:v => v.text ? '' : 'Write something first.',
+  onSave:v => mutate('added a note', () => upsert('notes', {text:v.text, at:now()}), false)});
+A.editNote = el => { const n = S.col.notes[el.dataset.id]; form({title:'Edit note', values:n, fields:[{k:'text', label:'Note', type:'textarea'}], validate:v => v.text ? '' : 'Write something first.',
+  onSave:v => mutate('edited a note', () => upsert('notes', Object.assign(clone(n), {text:v.text}))),
+  onDelete:() => mutate('deleted a note', () => remove('notes', n.id))}); };
+
+A.addPhoto = () => $('#photoIn').click();
+A.viewPhoto = el => { const p = S.col.photos[el.dataset.id]; const src = p.img || FULL[p.id] || THUMB[p.id];
+  const needFull = !p.img && !FULL[p.id];
+  const sh = openSheet('<h2>Photo</h2>' + (src ? '<img id="pvImg" src="' + src + '" alt="" style="width:100%;border-radius:12px;display:block">' : '<img id="pvImg" alt="" class="hidden" style="width:100%;border-radius:12px;display:block">') +
+    '<p class="note' + (needFull ? '' : ' hidden') + '" id="pvMsg">Loading full size.</p>' + fieldHtml({k:'cap', label:'Caption'}, p.cap) +
+    '<p class="note">Added by ' + esc(pname(p.by)) + ', ' + esc(fmtStamp(p.at)) + '.</p><div class="actions"><button class="btn warn" type="button" id="pDel">Delete</button><button class="btn" type="button" id="pX">Close</button><button class="btn pri" type="button" id="pS">Save</button></div>');
+  if (needFull) ensureFull(p.id).then(img => { const im = $('#pvImg'), m = $('#pvMsg'); if (!im || !$('#sheet')) return;
+    if (img) { im.src = img; im.classList.remove('hidden'); if (m) m.classList.add('hidden'); }
+    else if (m) m.textContent = navigator.onLine === false ? 'Full size downloads when this phone has signal.' : 'Full size is still uploading from ' + pname(p.by) + "'s phone."; });
+  $('#pX').onclick = closeSheet;
+  $('#pS').onclick = () => { const cap = $('#f_cap').value.trim(); closeSheet(); if (cap !== (p.cap || '')) mutate('captioned a photo', () => upsert('photos', Object.assign(clone(p), {cap}))); };
+  $('#pDel').onclick = () => { closeSheet(); mutate('deleted a photo', () => remove('photos', p.id)); };
+};
+function loadImg(file) { return new Promise((res, rej) => { const url = URL.createObjectURL(file); const im = new Image(); im.onload = () => { res(im); }; im.onerror = () => rej(new Error('bad image')); im.src = url; }); }
+function makeFull(im) {
+  let d = '';
+  for (const max of [PHOTO_MAX, 1400, 1200, 1000, 800, 640]) for (const q of [0.85, 0.78, 0.7, 0.62, 0.55]) {
+    d = scaled(im, max, q); if (d.length * 4 / 3 + 400 < ENV_MAX) return d;
+  }
+  return d;
+}
+function scaled(im, max, q) { const r = Math.min(1, max / Math.max(im.naturalWidth, im.naturalHeight)); const c = document.createElement('canvas'); c.width = Math.round(im.naturalWidth * r); c.height = Math.round(im.naturalHeight * r); const x = c.getContext('2d'); x.imageSmoothingEnabled = true; x.imageSmoothingQuality = 'high'; x.drawImage(im, 0, 0, c.width, c.height); return c.toDataURL('image/jpeg', q); }
+async function onPhoto(e) {
+  const files = [...(e.target.files || [])]; e.target.value = '';
+  if (!files.length) return;
+  const added = []; let bad = 0;
+  for (const file of files) {
+    try { const im = await loadImg(file); const img = makeFull(im), thumb = scaled(im, THUMB_MAX, 0.72); const id = uid(); await IDB.put('pending', id, {img, thumb}); FULL[id] = img; THUMB[id] = thumb; added.push(id); }
+    catch (err) { bad++; }
+  }
+  if (added.length) {
+    if (MODE !== 'cloud') { for (const id of added) { await IDB.put('img', id, FULL[id]); await IDB.put('img', id + '#t', THUMB[id]); await IDB.del('pending', id); } }
+    await refreshPending();
+    mutate(added.length === 1 ? 'added a photo' : 'added ' + added.length + ' photos', () => added.forEach((id, i) => upsert('photos', {id, file:true, cap:'', at:now() + i})), false);
+  }
+  if (bad) note(bad === 1 ? 'One file could not be read as a photo.' : bad + ' files could not be read as photos.');
+}
+
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-a]'); if (!t) return;
+  if (t.tagName === 'A') return;
+  if (e.target.closest('a')) return;
+  const f = A[t.dataset.a]; if (f) { e.preventDefault(); f(t, e); }
+});
+
+/* ---------- Settings ---------- */
+function openSettings() {
+  const cloud = MODE === 'cloud';
+  const sh = openSheet('<h2>Settings</h2>' +
+    '<h3>Sync and sharing</h3><p class="note" id="syncLine">' + esc(syncLine()) + '</p>' +
+    (cloud ? '<p class="note">Repo ' + esc(REPO.owner + '/' + REPO.repo) + '. This phone is ' + esc(pname(me())) + '.</p>' +
+      '<div class="actions"><button class="btn" type="button" id="sNow">Sync now</button></div>' +
+      '<p class="note">To add a phone, send the page link and the passcode in separate messages. On the new phone, open the link, choose Join this trip, enter the passcode and pick a name.</p>'
+      : '<p class="note">' + (MODE === 'artifact' ? 'This preview runs inside Claude, which blocks network calls, so nothing syncs.' : 'Sync works when the page is served from GitHub Pages.') + '</p>') +
+    (cloud ? '<h3>Change passcode</h3><p class="note">Re-encrypts the trip and access files. Other phones will ask for the new passcode.</p>' +
+      fieldHtml({k:'np1', label:'New passcode', type:'password'}, '') + fieldHtml({k:'np2', label:'Type it again', type:'password'}, '') +
+      '<p class="alert hidden" id="pErr"></p><div class="actions"><button class="btn" type="button" id="sPass">Change passcode</button></div>' +
+      '<h3>GitHub token</h3><p class="note">Paste a replacement when the token expires or is rotated. It is stored encrypted in access.json.</p>' +
+      fieldHtml({k:'ntok', label:'New token', type:'password'}, '') + '<p class="alert hidden" id="tErr"></p><div class="actions"><button class="btn" type="button" id="sTok">Update token</button></div>' : '') +
+    '<h3>App icon</h3><p class="note">Replace the home-screen icon with a photo. ' + (cloud ? 'It is cropped square and committed as icon-180, icon-192 and icon-32. Re-add the app to the home screen to see it.' : 'Uploading needs GitHub Pages sync.') + '</p>' +
+    '<input type="file" id="iconIn" accept="image/*" class="hidden"><div class="actions"><button class="btn" type="button" id="sIcon"' + (cloud ? '' : ' disabled') + '>Choose photo</button></div><p class="note hidden" id="iconMsg"></p>' +
+    '<h3>Time format</h3><div class="seg" role="group"><button type="button" id="t12" aria-pressed="' + !PREFS.h24 + '">12-hour</button><button type="button" id="t24" aria-pressed="' + !!PREFS.h24 + '">24-hour</button></div>' +
+    (cloud || MODE === 'local' ? '<h3>This phone</h3><div class="actions"><button class="btn warn" type="button" id="sOut">Sign out of this phone</button></div>' : '') +
+    '<p class="note">Version ' + esc(VER) + '.</p><div class="actions"><button class="btn" type="button" id="sClose">Close</button></div>');
+  $('#sClose').onclick = closeSheet;
+  $('#t12').onclick = () => { PREFS.h24 = false; store.set('prefs', PREFS); closeSheet(); render(); };
+  $('#t24').onclick = () => { PREFS.h24 = true; store.set('prefs', PREFS); closeSheet(); render(); };
+  if ($('#sOut')) $('#sOut').onclick = signOut;
+  if (!cloud) return;
+  $('#sNow').onclick = () => { syncState.err = ''; sync('manual'); };
+  $('#sPass').onclick = changePass;
+  $('#sTok').onclick = updateToken;
+  $('#sIcon').onclick = () => $('#iconIn').click();
+  $('#iconIn').onchange = uploadIcon;
+}
+function sErr(id, m) { const e = $(id); if (e) { e.textContent = m; e.classList.toggle('hidden', !m); } }
+async function changePass() {
+  const a = $('#f_np1').value, b = $('#f_np2').value;
+  if (a.length < 12) return sErr('#pErr', 'Use at least 12 characters.');
+  if (a !== b) return sErr('#pErr', 'The two passcodes do not match.');
+  sErr('#pErr', ''); busyBtn('#sPass', true);
+  try {
+    const acc = await ghRead('access.json', CFG.token);
+    const old = CFG.pass;
+    CFG.pass = a; store.set('cfg', CFG); syncState.force = true; store.set('dirty', true);
+    const msgs = store.get('msgs', []); msgs.push(pname(me()) + ' changed the passcode'); store.set('msgs', msgs);
+    await syncForced(old);
+    const files = live('photos').filter(p => p.file);
+    for (let i = 0; i < files.length; i++) {
+      const p = files[i]; $('#sPass').textContent = 'Re-encrypting photos, ' + (i + 1) + ' of ' + files.length;
+      for (const [path, key] of [[thumbPath(p.id), p.id + '#t'], [photoPath(p.id), p.id]]) {
+        const f = await ghRead(path, CFG.token); if (!f) continue;
+        let img = await IDB.get('img', key);
+        if (!img) { img = (await decryptObj(JSON.parse(f.text), old)).img; await IDB.put('img', key, img); }
+        await ghWrite(path, JSON.stringify(await encryptObj({img}, a)), f.sha, pname(me()) + ' changed the passcode', CFG.token);
+      }
+    }
+    await ghWrite('access.json', JSON.stringify(await encryptObj({token:CFG.token, by:me(), at:now()}, a)), acc ? acc.sha : null, pname(me()) + ' changed the passcode', CFG.token);
+    closeSheet(); note('Passcode changed. Send the new one to the crew in a separate message from the link.');
+  } catch (e) { busyBtn('#sPass', false); sErr('#pErr', e.message || 'Could not change the passcode.'); }
+}
+async function syncForced(oldPass) {
+  // trip.json must be decrypted with the old passcode and re-encrypted with the new one
+  for (let i = 0; i < 6; i++) {
+    const f = await ghRead('trip.json', CFG.token);
+    let merged = S;
+    if (f) { const remote = upgrade(await decryptObj(JSON.parse(f.text), oldPass)); merged = merge(remote, S); }
+    const env = JSON.stringify(await encryptObj(merged, CFG.pass));
+    try { SHA = await ghWrite('trip.json', env, f ? f.sha : null, pname(me()) + ' changed the passcode', CFG.token); S = merged; store.set('cache', {state:S, sha:SHA}); store.set('dirty', false); store.set('msgs', []); syncState.force = false; syncState.err = ''; syncState.last = now(); store.set('lastsync', syncState.last); render(); return; }
+    catch (e) { if (e.status === 409 || e.status === 422) continue; throw e; }
+  }
+  throw new Error('Could not save after several tries. Try again.');
+}
+async function updateToken() {
+  const tok = $('#f_ntok').value.trim(); if (!tok) return sErr('#tErr', 'Paste the new token.');
+  sErr('#tErr', ''); busyBtn('#sTok', true);
+  try {
+    const f = await ghRead('trip.json', tok); if (!f) throw new Error('The new token cannot see trip.json.');
+    const acc = await ghRead('access.json', tok);
+    await ghWrite('access.json', JSON.stringify(await encryptObj({token:tok, by:me(), at:now()}, CFG.pass)), acc ? acc.sha : null, pname(me()) + ' updated the token', tok);
+    CFG.token = tok; store.set('cfg', CFG); syncState.err = ''; closeSheet(); note('Token updated. Other phones pick it up the next time they join.'); sync('token');
+  } catch (e) { busyBtn('#sTok', false); sErr('#tErr', e.status === 401 || e.status === 403 ? 'GitHub refused that token.' : (e.message || 'Could not update the token.')); }
+}
+async function uploadIcon(e) {
+  const file = e.target.files && e.target.files[0]; e.target.value = ''; if (!file) return;
+  const m = $('#iconMsg'); m.classList.remove('hidden'); m.textContent = 'Uploading icon.';
+  try {
+    const im = await loadImg(file); const s = Math.min(im.naturalWidth, im.naturalHeight);
+    const out = {};
+    [180, 192, 32].forEach(n => { const c = document.createElement('canvas'); c.width = c.height = n; const x = c.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(im, (im.naturalWidth - s) / 2, (im.naturalHeight - s) / 2, s, s, 0, 0, n, n); out[n] = c.toDataURL('image/png').split(',')[1]; });
+    for (const n of [180, 192, 32]) { const path = 'icon-' + n + '.png'; const cur = await ghRead(path, CFG.token, true); await ghWriteB64(path, out[n], cur ? cur.sha : null, pname(me()) + ' replaced the app icon', CFG.token); }
+    m.textContent = 'Icon uploaded. It shows after the Pages site updates and the app is re-added to the home screen.';
+  } catch (err) { m.textContent = 'Icon upload failed' + (err.status ? ' (GitHub ' + err.status + ').' : '.'); }
+}
+
+/* ---------- Boot ---------- */
+function boot() {
+  refreshPending();
+  if (MODE === 'cloud') {
+    window.addEventListener('focus', () => sync('focus'));
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') sync('visible'); });
+    window.addEventListener('online', () => { syncState.offline = false; sync('online'); });
+    window.addEventListener('offline', () => { syncState.offline = true; updatePill(); });
+    if (CFG && CFG.token && CFG.pass) {
+      const c = store.get('cache', null);
+      if (c && c.state) { S = upgrade(c.state); SHA = c.sha; startCloud(); }
+      else { S = emptyState(); startCloud(); }
+    } else renderGate('join');
+  } else {
+    S = upgrade(store.get('local', null) || (SEED ? clone(SEED) : emptyState()));
+    if (MODE === 'artifact' && !store.get('me', null)) store.set('me', 'grant');
+    renderApp();
+  }
+  if (MODE !== 'artifact' && 'serviceWorker' in navigator && window.isSecureContext) {
+    navigator.serviceWorker.register('sw.js', {scope:'./'}).catch(() => {});
+  }
+}
+boot();
+</script>
+</body>
+</html>

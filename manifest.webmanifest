@@ -1,0 +1,22 @@
+{
+  "name": "SB Camping Trip",
+  "short_name": "SB Camping",
+  "id": "./?app=sbct",
+  "start_url": "./?source=homescreen",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#E6ECE9",
+  "theme_color": "#2F5D6E",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
